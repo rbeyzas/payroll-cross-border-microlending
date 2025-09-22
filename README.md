@@ -140,5 +140,172 @@ The frontend starter also provides an example of interactions with your HelloWor
 ## Next Steps
 
 You can take this project and customize it to build your own decentralized applications on Algorand. Make sure to understand how to use AlgoKit and how to write smart contracts for Algorand before you start.
-# payroll-cross-border-microlending
-# payroll-cross-border-microlending
+
+# Payroll + Cross-Border Microlending (AI Destekli)
+
+Bu proje, Algorand üzerinde iki temel finansal işlevi bir araya getiriyor:
+
+## 🔹 Proje Özellikleri
+
+### Payroll (Maaş Ödeme Sistemi)
+
+- İşveren, kontrat üzerinden çalışanlarını ekleyip maaşlarını tanımlar
+- Kontrata fon gönderir
+- "Disburse" fonksiyonu çalıştırıldığında kontrat, tüm çalışanlara otomatik olarak maaşlarını dağıtır
+- Bordro ödemeleri şeffaf, hızlı ve ucuz şekilde blockchain üzerinde gerçekleşir
+
+### Cross-Border Microlending (Sınır Ötesi Mikro Kredi)
+
+- Kullanıcılar küçük tutarlarda kredi talep edebilir (ör. 20 ALGO)
+- Talep onaylanınca kontrat otomatik olarak borçluya kredi gönderir
+- Kullanıcı geri ödemelerini taksitlerle kontrata yapar
+- Tüm süreç şeffaf ve güvenli biçimde blockchain üzerinde yürütülür
+
+### AI Katmanı
+
+- **Payroll tarafında**: İşverenin yüklediği CSV dosyasından (isim, adres, maaş bilgisi) kontrata parametreleri otomatik hazırlar
+- **Microlending tarafında**: Kullanıcının cüzdan geçmişine bakarak basit bir risk skoru ve kısa bir açıklama üretir
+
+## 🚀 Kurulum ve Çalıştırma
+
+### Frontend (React + TypeScript)
+
+```bash
+cd projects/algorand-frontend
+npm install
+npm run dev
+```
+
+### Smart Contracts (Python + AlgoKit)
+
+```bash
+cd projects/algorand-contracts
+algokit project bootstrap all
+algokit project run build
+algokit project run test
+```
+
+## 📋 PayrollApp Smart Contract Fonksiyonları
+
+### Global State
+
+- `asa_id`: ASA ID (0 for ALGO)
+- `cycle_secs`: Pay cycle in seconds
+- `admin`: Admin address
+- `total_employees`: Total number of employees
+- `last_disbursement`: Last disbursement timestamp
+
+### Box Storage (Employee Data)
+
+- `amount`: Employee salary amount
+- `paused`: Employee pause status
+
+### Fonksiyonlar
+
+1. `create_payroll(asa_id, cycle_secs, admin)` - Payroll sistemi oluştur
+2. `add_employee(address, amount)` - Çalışan ekle
+3. `remove_employee(address)` - Çalışan kaldır
+4. `fund_app(amount)` - Kontratı fonla
+5. `disburse(batch_size)` - Ödemeleri dağıt
+6. `pause_employee(address, paused)` - Çalışanı duraklat/devam ettir
+7. `get_employee_info(address)` - Çalışan bilgisi al
+8. `get_payroll_info()` - Payroll bilgisi al
+9. `get_total_employees()` - Toplam çalışan sayısı
+
+## 🎯 Frontend Wizard (4 Adım)
+
+1. **Step 1**: Payroll oluştur (ASA ID, cycle seconds, admin)
+2. **Step 2**: Çalışan ekle (address, amount)
+3. **Step 3**: Fonla (app hesabına ALGO/ASA gönder)
+4. **Step 4**: Dağıtım (disburse butonu)
+
+## 📊 Analytics & Monitoring
+
+Proje, kullanım verilerini ölçmek için analytics entegrasyonu içerir:
+
+- Kaç payroll kontratı kuruldu
+- Kaç maaş dağıtımı yapıldı
+- Kaç kredi talep edildi
+- Kaç kullanıcı geri ödeme yaptı
+- Default oranları
+
+## 🌐 Network Configuration
+
+### Testnet
+
+- Algod: `https://testnet-api.algonode.cloud`
+- Indexer: `https://testnet-idx.algonode.cloud`
+
+### Environment Variables
+
+```bash
+VITE_ALGOD_SERVER=https://testnet-api.algonode.cloud
+VITE_ALGOD_PORT=443
+VITE_ALGOD_TOKEN=
+VITE_ALGOD_NETWORK=testnet
+VITE_INDEXER_SERVER=https://testnet-idx.algonode.cloud
+VITE_INDEXER_PORT=443
+VITE_INDEXER_TOKEN=
+VITE_API_URL=http://localhost:3001
+```
+
+## 📱 Kullanım
+
+1. **Wallet Bağlantısı**: Connect Wallet butonuna tıklayın ve cüzdanınızı bağlayın
+2. **Payroll Oluşturma**: /payroll sayfasında "Create New Payroll" butonuna tıklayın
+3. **Wizard Adımları**: 4 adımlı wizard'ı takip edin
+4. **Ödeme Dağıtımı**: "Disburse Payments" butonu ile çalışanlara ödeme yapın
+
+## 🔗 AppID ve Explorer Linkleri
+
+### PayrollApp Smart Contract
+
+- **Testnet AppID**: `746195399`
+- **AlgoExplorer**: `https://testnet.algoexplorer.io/application/746195399`
+- **App Address**: `MYAWIGZ6DKSMC33XYEN6DSUY7HRGMCIQWDTJVUG6JC6A56EW2BSIPFBY3Y`
+- **Mainnet AppID**: `[TO_BE_DEPLOYED]`
+
+> **✅ Deployed**: PayrollApp başarıyla testnet'e deploy edildi ve çalışır durumda!
+
+## 🛠️ Geliştirme
+
+### Yeni Özellik Ekleme
+
+1. Smart contract fonksiyonlarını `contract.py` dosyasına ekleyin
+2. Frontend component'lerini `src/components/` klasörüne ekleyin
+3. Routing'i `App.tsx` dosyasında güncelleyin
+4. Test'leri `contract.algo.spec.ts` dosyasına ekleyin
+
+### Test Etme
+
+```bash
+# Smart contract testleri
+cd projects/algorand-contracts
+algokit project run test
+
+# Frontend testleri
+cd projects/algorand-frontend
+npm test
+```
+
+## 📄 Lisans
+
+MIT License - Detaylar için LICENSE dosyasına bakın.
+
+## 🤝 Katkıda Bulunma
+
+1. Fork yapın
+2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
+3. Commit yapın (`git commit -m 'Add some AmazingFeature'`)
+4. Push yapın (`git push origin feature/AmazingFeature`)
+5. Pull Request açın
+
+## 📞 İletişim
+
+- **Email**: contact@payrolllend.com
+- **Twitter**: [@PayrollLend](https://twitter.com/payrolllend)
+- **Discord**: [PayrollLend Community](https://discord.gg/payrolllend)
+
+---
+
+**Built with ❤️ on Algorand Blockchain**

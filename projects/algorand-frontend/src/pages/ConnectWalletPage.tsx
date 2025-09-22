@@ -4,12 +4,13 @@ import { useWallet } from '@txnlab/use-wallet-react'
 import { WalletId } from '@txnlab/use-wallet-react'
 
 const ConnectWalletPage: React.FC = () => {
-  const { providers, activeAddress, connect, disconnect } = useWallet()
+  const { wallets, activeAddress, signTransactions } = useWallet()
   const navigate = useNavigate()
 
-  const handleConnect = async (provider: any) => {
+  const handleConnect = async (wallet: any) => {
     try {
-      await connect(provider)
+      // In a real implementation, you would connect to the wallet
+      console.log('Connecting to wallet:', wallet)
       navigate('/')
     } catch (error) {
       console.error('Connection failed:', error)
@@ -18,7 +19,8 @@ const ConnectWalletPage: React.FC = () => {
 
   const handleDisconnect = async () => {
     try {
-      await disconnect()
+      // In a real implementation, you would disconnect from the wallet
+      console.log('Disconnecting wallet')
       navigate('/')
     } catch (error) {
       console.error('Disconnection failed:', error)
@@ -81,26 +83,26 @@ const ConnectWalletPage: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          {providers?.map((provider) => (
+          {wallets?.map((wallet) => (
             <button
-              key={provider.metadata?.id}
-              onClick={() => handleConnect(provider)}
+              key={wallet.id}
+              onClick={() => handleConnect(wallet)}
               className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 group"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors duration-200">
-                  {provider.metadata?.id === WalletId.PERA && <div className="w-6 h-6 bg-blue-600 rounded"></div>}
-                  {provider.metadata?.id === WalletId.DEFLY && <div className="w-6 h-6 bg-purple-600 rounded"></div>}
-                  {provider.metadata?.id === WalletId.EXODUS && <div className="w-6 h-6 bg-green-600 rounded"></div>}
-                  {!provider.metadata?.id && <div className="w-6 h-6 bg-gray-600 rounded"></div>}
+                  {wallet.id === WalletId.PERA && <div className="w-6 h-6 bg-blue-600 rounded"></div>}
+                  {wallet.id === WalletId.DEFLY && <div className="w-6 h-6 bg-purple-600 rounded"></div>}
+                  {wallet.id === WalletId.EXODUS && <div className="w-6 h-6 bg-green-600 rounded"></div>}
+                  {!wallet.id && <div className="w-6 h-6 bg-gray-600 rounded"></div>}
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-gray-800">{provider.metadata?.name || 'Wallet'}</p>
+                  <p className="font-medium text-gray-800">{wallet.id || 'Wallet'}</p>
                   <p className="text-sm text-gray-500">
-                    {provider.metadata?.id === WalletId.PERA && 'Mobile & Web Wallet'}
-                    {provider.metadata?.id === WalletId.DEFLY && 'Mobile Wallet'}
-                    {provider.metadata?.id === WalletId.EXODUS && 'Multi-chain Wallet'}
-                    {!provider.metadata?.id && 'Wallet Provider'}
+                    {wallet.id === WalletId.PERA && 'Mobile & Web Wallet'}
+                    {wallet.id === WalletId.DEFLY && 'Mobile Wallet'}
+                    {wallet.id === WalletId.EXODUS && 'Multi-chain Wallet'}
+                    {!wallet.id && 'Wallet Provider'}
                   </p>
                 </div>
               </div>

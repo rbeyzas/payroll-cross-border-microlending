@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import LandingPage from './pages/LandingPage'
 import ConnectWalletPage from './pages/ConnectWalletPage'
+import PayrollPage from './pages/PayrollPage'
 import Home from './Home'
 import { getAlgodConfigFromViteEnvironment, getKmdConfigFromViteEnvironment } from './utils/network/getAlgoClientConfigs'
 
@@ -66,7 +67,7 @@ export default function App() {
               <Route path="/connect-wallet" element={<ConnectWalletPage />} />
               <Route path="/demo" element={<Home />} />
               <Route path="/dashboard" element={<Home />} />
-              <Route path="/payroll" element={<Home />} />
+              <Route path="/payroll" element={<PayrollPage />} />
               <Route path="/microlending" element={<Home />} />
               <Route path="/analytics" element={<Home />} />
             </Routes>
