@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { PayrollAppClient } from '../contracts/PayrollApp'
 import { AlgorandClient } from '@algorandfoundation/algokit-utils'
+import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
 interface Employee {
   address: string
@@ -17,7 +18,7 @@ interface PayrollData {
 }
 
 const PayrollWizard: React.FC = () => {
-  const { activeAddress, wallets } = useWallet()
+  const { activeAddress, transactionSigner } = useWallet()
   const [currentStep, setCurrentStep] = useState(1)
   const [payrollData, setPayrollData] = useState<PayrollData>({
     asaId: '',
@@ -47,21 +48,39 @@ const PayrollWizard: React.FC = () => {
     try {
       console.log('Creating payroll with:', payrollData.asaId, payrollData.cycleSecs, activeAddress)
 
-      // Initialize Algorand client
-      const algorand = AlgorandClient.fromEnvironment()
+      // Use the same config method as working components
+      const algodConfig = getAlgodConfigFromViteEnvironment()
+      const algorand = AlgorandClient.fromConfig({ algodConfig })
 
-      // Create PayrollApp client
+      // Check if account has sufficient balance
+      const accountInfo = await algorand.account.getInformation(activeAddress!)
+
+      if (accountInfo.amount < 100000) {
+        // Less than 0.1 ALGO
+        setError(
+          `Insufficient balance. You need at least 0.1 ALGO. Current balance: ${accountInfo.amount / 1000000} ALGO. Please get testnet ALGO from: https://testnet.algoexplorer.io/dispenser`,
+        )
+        return
+      }
+
+      // Set default signer
+      algorand.setDefaultSigner(transactionSigner)
+
+      // Create PayrollApp client using constructor
       const payrollClient = new PayrollAppClient({
         algorand,
-        sender: activeAddress,
-        appId: 746195399, // Real deployed AppID
+        defaultSender: activeAddress!,
+        appId: BigInt(746195399), // Real deployed AppID
       })
 
       // Call createPayroll method
-      await payrollClient.send.createPayroll({
+      const result = await payrollClient.send.createPayroll({
         args: [],
-        sender: activeAddress,
+        sender: activeAddress!,
       })
+
+      console.log('Transaction result:', result)
+      console.log('Payroll created successfully!')
 
       console.log('Payroll created successfully!')
       setCurrentStep(2)
@@ -82,11 +101,30 @@ const PayrollWizard: React.FC = () => {
     setError('')
 
     try {
-      // TODO: Call smart contract fund_app function
       console.log('Funding payroll with amount:', payrollData.totalFunded)
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      // Use the same config method as working components
+      const algodConfig = getAlgodConfigFromViteEnvironment()
+      const algorand = AlgorandClient.fromConfig({ algodConfig })
+
+      // Set default signer
+      algorand.setDefaultSigner(transactionSigner)
+
+      // Create PayrollApp client using constructor
+      const payrollClient = new PayrollAppClient({
+        algorand,
+        defaultSender: activeAddress!,
+        appId: BigInt(746195399), // Real deployed AppID
+      })
+
+      // Call fundApp method
+      const result = await payrollClient.send.fundApp({
+        args: [],
+        sender: activeAddress!,
+      })
+
+      console.log('Funding result:', result)
+      console.log('Payroll funded successfully!')
 
       setCurrentStep(4)
     } catch (err) {
@@ -104,21 +142,28 @@ const PayrollWizard: React.FC = () => {
     try {
       console.log('Disbursing payments to employees')
 
-      // Initialize Algorand client
-      const algorand = AlgorandClient.fromEnvironment()
+      // Use the same config method as working components
+      const algodConfig = getAlgodConfigFromViteEnvironment()
+      const algorand = AlgorandClient.fromConfig({ algodConfig })
 
-      // Create PayrollApp client
+      // Set default signer
+      algorand.setDefaultSigner(transactionSigner)
+
+      // Create PayrollApp client using constructor
       const payrollClient = new PayrollAppClient({
         algorand,
-        sender: activeAddress,
-        appId: 746195399, // Real deployed AppID
+        defaultSender: activeAddress!,
+        appId: BigInt(746195399), // Real deployed AppID
       })
 
       // Call disburse method
-      await payrollClient.send.disburse({
+      const result = await payrollClient.send.disburse({
         args: [],
-        sender: activeAddress,
+        sender: activeAddress!,
       })
+
+      console.log('Disbursement result:', result)
+      console.log('Payments disbursed successfully!')
 
       alert('Payments disbursed successfully!')
     } catch (err) {

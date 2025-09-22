@@ -19,7 +19,7 @@ main_after_if_else@18:
     return
 
 main_getTotalEmployees_route@11:
-    // smart_contracts/payroll_app/contract.algo.ts:36
+    // smart_contracts/payroll_app/contract.algo.ts:63
     // public getTotalEmployees(): void {
     txn OnCompletion
     !
@@ -30,7 +30,7 @@ main_getTotalEmployees_route@11:
     return
 
 main_getPayrollInfo_route@10:
-    // smart_contracts/payroll_app/contract.algo.ts:32
+    // smart_contracts/payroll_app/contract.algo.ts:56
     // public getPayrollInfo(): void {
     txn OnCompletion
     !
@@ -41,7 +41,7 @@ main_getPayrollInfo_route@10:
     return
 
 main_getEmployeeInfo_route@9:
-    // smart_contracts/payroll_app/contract.algo.ts:28
+    // smart_contracts/payroll_app/contract.algo.ts:49
     // public getEmployeeInfo(): void {
     txn OnCompletion
     !
@@ -52,7 +52,7 @@ main_getEmployeeInfo_route@9:
     return
 
 main_pauseEmployee_route@8:
-    // smart_contracts/payroll_app/contract.algo.ts:24
+    // smart_contracts/payroll_app/contract.algo.ts:42
     // public pauseEmployee(): void {
     txn OnCompletion
     !
@@ -63,7 +63,7 @@ main_pauseEmployee_route@8:
     return
 
 main_disburse_route@7:
-    // smart_contracts/payroll_app/contract.algo.ts:20
+    // smart_contracts/payroll_app/contract.algo.ts:35
     // public disburse(): void {
     txn OnCompletion
     !
@@ -74,7 +74,7 @@ main_disburse_route@7:
     return
 
 main_fundApp_route@6:
-    // smart_contracts/payroll_app/contract.algo.ts:16
+    // smart_contracts/payroll_app/contract.algo.ts:28
     // public fundApp(): void {
     txn OnCompletion
     !
@@ -85,7 +85,7 @@ main_fundApp_route@6:
     return
 
 main_removeEmployee_route@5:
-    // smart_contracts/payroll_app/contract.algo.ts:12
+    // smart_contracts/payroll_app/contract.algo.ts:21
     // public removeEmployee(): void {
     txn OnCompletion
     !
@@ -96,7 +96,7 @@ main_removeEmployee_route@5:
     return
 
 main_addEmployee_route@4:
-    // smart_contracts/payroll_app/contract.algo.ts:8
+    // smart_contracts/payroll_app/contract.algo.ts:14
     // public addEmployee(): void {
     txn OnCompletion
     !
@@ -107,7 +107,7 @@ main_addEmployee_route@4:
     return
 
 main_createPayroll_route@3:
-    // smart_contracts/payroll_app/contract.algo.ts:4
+    // smart_contracts/payroll_app/contract.algo.ts:7
     // public createPayroll(): void {
     txn OnCompletion
     !

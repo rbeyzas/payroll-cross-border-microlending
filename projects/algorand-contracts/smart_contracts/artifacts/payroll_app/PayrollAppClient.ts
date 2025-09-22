@@ -23,7 +23,7 @@ import { TransactionComposer, AppCallMethodCall, AppMethodCallTransactionArgumen
 import { SendParams, SendSingleTransactionResult, SendAtomicTransactionComposerResults } from '@algorandfoundation/algokit-utils/types/transaction'
 import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk'
 
-export const APP_SPEC: Arc56Contract = {"name":"PayrollApp","structs":{},"methods":[{"name":"createPayroll","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"addEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"removeEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"fundApp","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"disburse","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"pauseEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"getEmployeeInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"getPayrollInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}},{"name":"getTotalEmployees","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"events":[],"recommendations":{}}],"arcs":[22,28],"networks":{},"state":{"schema":{"global":{"ints":0,"bytes":0},"local":{"ints":0,"bytes":0}},"keys":{"global":{},"local":{},"box":{}},"maps":{"global":{},"local":{},"box":{}}},"bareActions":{"create":["NoOp"],"call":[]},"sourceInfo":{"approval":{"sourceInfo":[{"pc":[85,94,103,112,121,130,139,148,157],"errorMessage":"OnCompletion is not NoOp"},{"pc":[171],"errorMessage":"can only call when creating"},{"pc":[88,97,106,115,124,133,142,151,160],"errorMessage":"can only call when not creating"}],"pcOffsetMethod":"none"},"clear":{"sourceInfo":[],"pcOffsetMethod":"none"}},"source":{"approval":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMQogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MwogICAgLy8gZXhwb3J0IGNsYXNzIFBheXJvbGxBcHAgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdAMTQKICAgIHB1c2hieXRlc3MgMHhhNjVjMWQ4YyAweDhjNTlkZTAxIDB4Y2Q1NjQxMGYgMHhmYTU1NTZlYyAweDY5ODczNmFkIDB4Yzk0ZjQyZjAgMHg4Y2EzYmQ4YiAweGZhMzQ0Mzc5IDB4YzI0NjZmOWEgLy8gbWV0aG9kICJjcmVhdGVQYXlyb2xsKCl2b2lkIiwgbWV0aG9kICJhZGRFbXBsb3llZSgpdm9pZCIsIG1ldGhvZCAicmVtb3ZlRW1wbG95ZWUoKXZvaWQiLCBtZXRob2QgImZ1bmRBcHAoKXZvaWQiLCBtZXRob2QgImRpc2J1cnNlKCl2b2lkIiwgbWV0aG9kICJwYXVzZUVtcGxveWVlKCl2b2lkIiwgbWV0aG9kICJnZXRFbXBsb3llZUluZm8oKXZvaWQiLCBtZXRob2QgImdldFBheXJvbGxJbmZvKCl2b2lkIiwgbWV0aG9kICJnZXRUb3RhbEVtcGxveWVlcygpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzIG1haW5fYWRkRW1wbG95ZWVfcm91dGVANCBtYWluX3JlbW92ZUVtcGxveWVlX3JvdXRlQDUgbWFpbl9mdW5kQXBwX3JvdXRlQDYgbWFpbl9kaXNidXJzZV9yb3V0ZUA3IG1haW5fcGF1c2VFbXBsb3llZV9yb3V0ZUA4IG1haW5fZ2V0RW1wbG95ZWVJbmZvX3JvdXRlQDkgbWFpbl9nZXRQYXlyb2xsSW5mb19yb3V0ZUAxMCBtYWluX2dldFRvdGFsRW1wbG95ZWVzX3JvdXRlQDExCgptYWluX2FmdGVyX2lmX2Vsc2VAMTg6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czozCiAgICAvLyBleHBvcnQgY2xhc3MgUGF5cm9sbEFwcCBleHRlbmRzIENvbnRyYWN0IHsKICAgIHB1c2hpbnQgMCAvLyAwCiAgICByZXR1cm4KCm1haW5fZ2V0VG90YWxFbXBsb3llZXNfcm91dGVAMTE6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czozNgogICAgLy8gcHVibGljIGdldFRvdGFsRW1wbG95ZWVzKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2dldFBheXJvbGxJbmZvX3JvdXRlQDEwOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MzIKICAgIC8vIHB1YmxpYyBnZXRQYXlyb2xsSW5mbygpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9nZXRFbXBsb3llZUluZm9fcm91dGVAOToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjI4CiAgICAvLyBwdWJsaWMgZ2V0RW1wbG95ZWVJbmZvKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3BhdXNlRW1wbG95ZWVfcm91dGVAODoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjI0CiAgICAvLyBwdWJsaWMgcGF1c2VFbXBsb3llZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9kaXNidXJzZV9yb3V0ZUA3OgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MjAKICAgIC8vIHB1YmxpYyBkaXNidXJzZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9mdW5kQXBwX3JvdXRlQDY6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czoxNgogICAgLy8gcHVibGljIGZ1bmRBcHAoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fcmVtb3ZlRW1wbG95ZWVfcm91dGVANToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjEyCiAgICAvLyBwdWJsaWMgcmVtb3ZlRW1wbG95ZWUoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYWRkRW1wbG95ZWVfcm91dGVANDoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjgKICAgIC8vIHB1YmxpYyBhZGRFbXBsb3llZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9jcmVhdGVQYXlyb2xsX3JvdXRlQDM6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czo0CiAgICAvLyBwdWJsaWMgY3JlYXRlUGF5cm9sbCgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9iYXJlX3JvdXRpbmdAMTQ6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czozCiAgICAvLyBleHBvcnQgY2xhc3MgUGF5cm9sbEFwcCBleHRlbmRzIENvbnRyYWN0IHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgIGJueiBtYWluX2FmdGVyX2lmX2Vsc2VAMTgKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICAhCiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCg==","clear":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="},"byteCode":{"approval":"CiABATEbQQCaggkEplwdjASMWd4BBM1WQQ8E+lVW7ARphzatBMlPQvAEjKO9iwT6NEN5BMJGb5o2GgCOCQBLAEIAOQAwACcAHgAVAAwAA4EAQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZQP+nMRgURCJD","clear":"CoEBQw=="},"events":[],"templateVariables":{}} as unknown as Arc56Contract
+export const APP_SPEC: Arc56Contract = {"name":"PayrollApp","structs":{},"methods":[{"name":"createPayroll","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Create payroll system","events":[],"recommendations":{}},{"name":"addEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Add employee to payroll","events":[],"recommendations":{}},{"name":"removeEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Remove employee from payroll","events":[],"recommendations":{}},{"name":"fundApp","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Fund the application","events":[],"recommendations":{}},{"name":"disburse","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Disburse payments to employees","events":[],"recommendations":{}},{"name":"pauseEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Pause or unpause an employee","events":[],"recommendations":{}},{"name":"getEmployeeInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get employee information","events":[],"recommendations":{}},{"name":"getPayrollInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get payroll information","events":[],"recommendations":{}},{"name":"getTotalEmployees","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get total number of employees","events":[],"recommendations":{}}],"arcs":[22,28],"networks":{},"state":{"schema":{"global":{"ints":0,"bytes":0},"local":{"ints":0,"bytes":0}},"keys":{"global":{},"local":{},"box":{}},"maps":{"global":{},"local":{},"box":{}}},"bareActions":{"create":["NoOp"],"call":[]},"sourceInfo":{"approval":{"sourceInfo":[{"pc":[85,94,103,112,121,130,139,148,157],"errorMessage":"OnCompletion is not NoOp"},{"pc":[171],"errorMessage":"can only call when creating"},{"pc":[88,97,106,115,124,133,142,151,160],"errorMessage":"can only call when not creating"}],"pcOffsetMethod":"none"},"clear":{"sourceInfo":[],"pcOffsetMethod":"none"}},"source":{"approval":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMQogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MwogICAgLy8gZXhwb3J0IGNsYXNzIFBheXJvbGxBcHAgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdAMTQKICAgIHB1c2hieXRlc3MgMHhhNjVjMWQ4YyAweDhjNTlkZTAxIDB4Y2Q1NjQxMGYgMHhmYTU1NTZlYyAweDY5ODczNmFkIDB4Yzk0ZjQyZjAgMHg4Y2EzYmQ4YiAweGZhMzQ0Mzc5IDB4YzI0NjZmOWEgLy8gbWV0aG9kICJjcmVhdGVQYXlyb2xsKCl2b2lkIiwgbWV0aG9kICJhZGRFbXBsb3llZSgpdm9pZCIsIG1ldGhvZCAicmVtb3ZlRW1wbG95ZWUoKXZvaWQiLCBtZXRob2QgImZ1bmRBcHAoKXZvaWQiLCBtZXRob2QgImRpc2J1cnNlKCl2b2lkIiwgbWV0aG9kICJwYXVzZUVtcGxveWVlKCl2b2lkIiwgbWV0aG9kICJnZXRFbXBsb3llZUluZm8oKXZvaWQiLCBtZXRob2QgImdldFBheXJvbGxJbmZvKCl2b2lkIiwgbWV0aG9kICJnZXRUb3RhbEVtcGxveWVlcygpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzIG1haW5fYWRkRW1wbG95ZWVfcm91dGVANCBtYWluX3JlbW92ZUVtcGxveWVlX3JvdXRlQDUgbWFpbl9mdW5kQXBwX3JvdXRlQDYgbWFpbl9kaXNidXJzZV9yb3V0ZUA3IG1haW5fcGF1c2VFbXBsb3llZV9yb3V0ZUA4IG1haW5fZ2V0RW1wbG95ZWVJbmZvX3JvdXRlQDkgbWFpbl9nZXRQYXlyb2xsSW5mb19yb3V0ZUAxMCBtYWluX2dldFRvdGFsRW1wbG95ZWVzX3JvdXRlQDExCgptYWluX2FmdGVyX2lmX2Vsc2VAMTg6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czozCiAgICAvLyBleHBvcnQgY2xhc3MgUGF5cm9sbEFwcCBleHRlbmRzIENvbnRyYWN0IHsKICAgIHB1c2hpbnQgMCAvLyAwCiAgICByZXR1cm4KCm1haW5fZ2V0VG90YWxFbXBsb3llZXNfcm91dGVAMTE6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czo2MwogICAgLy8gcHVibGljIGdldFRvdGFsRW1wbG95ZWVzKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2dldFBheXJvbGxJbmZvX3JvdXRlQDEwOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6NTYKICAgIC8vIHB1YmxpYyBnZXRQYXlyb2xsSW5mbygpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9nZXRFbXBsb3llZUluZm9fcm91dGVAOToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjQ5CiAgICAvLyBwdWJsaWMgZ2V0RW1wbG95ZWVJbmZvKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3BhdXNlRW1wbG95ZWVfcm91dGVAODoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjQyCiAgICAvLyBwdWJsaWMgcGF1c2VFbXBsb3llZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9kaXNidXJzZV9yb3V0ZUA3OgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MzUKICAgIC8vIHB1YmxpYyBkaXNidXJzZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9mdW5kQXBwX3JvdXRlQDY6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czoyOAogICAgLy8gcHVibGljIGZ1bmRBcHAoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fcmVtb3ZlRW1wbG95ZWVfcm91dGVANToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjIxCiAgICAvLyBwdWJsaWMgcmVtb3ZlRW1wbG95ZWUoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYWRkRW1wbG95ZWVfcm91dGVANDoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjE0CiAgICAvLyBwdWJsaWMgYWRkRW1wbG95ZWUoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6NwogICAgLy8gcHVibGljIGNyZWF0ZVBheXJvbGwoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYmFyZV9yb3V0aW5nQDE0OgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MwogICAgLy8gZXhwb3J0IGNsYXNzIFBheXJvbGxBcHAgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICBibnogbWFpbl9hZnRlcl9pZl9lbHNlQDE4CiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgo=","clear":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="},"byteCode":{"approval":"CiABATEbQQCaggkEplwdjASMWd4BBM1WQQ8E+lVW7ARphzatBMlPQvAEjKO9iwT6NEN5BMJGb5o2GgCOCQBLAEIAOQAwACcAHgAVAAwAA4EAQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZQP+nMRgURCJD","clear":"CoEBQw=="},"events":[],"templateVariables":{}} as unknown as Arc56Contract
 
 /**
  * A state record containing binary data
@@ -217,6 +217,8 @@ export abstract class PayrollAppParamsFactory {
   /**
    * Constructs a no op call for the createPayroll()void ABI method
    *
+   * Create payroll system
+   *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
@@ -229,6 +231,8 @@ export abstract class PayrollAppParamsFactory {
   }
   /**
    * Constructs a no op call for the addEmployee()void ABI method
+   *
+   * Add employee to payroll
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
@@ -243,6 +247,8 @@ export abstract class PayrollAppParamsFactory {
   /**
    * Constructs a no op call for the removeEmployee()void ABI method
    *
+   * Remove employee from payroll
+   *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
@@ -255,6 +261,8 @@ export abstract class PayrollAppParamsFactory {
   }
   /**
    * Constructs a no op call for the fundApp()void ABI method
+   *
+   * Fund the application
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
@@ -269,6 +277,8 @@ export abstract class PayrollAppParamsFactory {
   /**
    * Constructs a no op call for the disburse()void ABI method
    *
+   * Disburse payments to employees
+   *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
@@ -281,6 +291,8 @@ export abstract class PayrollAppParamsFactory {
   }
   /**
    * Constructs a no op call for the pauseEmployee()void ABI method
+   *
+   * Pause or unpause an employee
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
@@ -295,6 +307,8 @@ export abstract class PayrollAppParamsFactory {
   /**
    * Constructs a no op call for the getEmployeeInfo()void ABI method
    *
+   * Get employee information
+   *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
@@ -308,6 +322,8 @@ export abstract class PayrollAppParamsFactory {
   /**
    * Constructs a no op call for the getPayrollInfo()void ABI method
    *
+   * Get payroll information
+   *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
@@ -320,6 +336,8 @@ export abstract class PayrollAppParamsFactory {
   }
   /**
    * Constructs a no op call for the getTotalEmployees()void ABI method
+   *
+   * Get total number of employees
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
@@ -574,6 +592,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `createPayroll()void` ABI method.
      *
+     * Create payroll system
+     *
      * @param params The params for the smart contract call
      * @returns The call params
      */
@@ -583,6 +603,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `addEmployee()void` ABI method.
+     *
+     * Add employee to payroll
      *
      * @param params The params for the smart contract call
      * @returns The call params
@@ -594,6 +616,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `removeEmployee()void` ABI method.
      *
+     * Remove employee from payroll
+     *
      * @param params The params for the smart contract call
      * @returns The call params
      */
@@ -603,6 +627,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `fundApp()void` ABI method.
+     *
+     * Fund the application
      *
      * @param params The params for the smart contract call
      * @returns The call params
@@ -614,6 +640,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `disburse()void` ABI method.
      *
+     * Disburse payments to employees
+     *
      * @param params The params for the smart contract call
      * @returns The call params
      */
@@ -623,6 +651,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `pauseEmployee()void` ABI method.
+     *
+     * Pause or unpause an employee
      *
      * @param params The params for the smart contract call
      * @returns The call params
@@ -634,6 +664,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo()void` ABI method.
      *
+     * Get employee information
+     *
      * @param params The params for the smart contract call
      * @returns The call params
      */
@@ -644,6 +676,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `getPayrollInfo()void` ABI method.
      *
+     * Get payroll information
+     *
      * @param params The params for the smart contract call
      * @returns The call params
      */
@@ -653,6 +687,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `getTotalEmployees()void` ABI method.
+     *
+     * Get total number of employees
      *
      * @param params The params for the smart contract call
      * @returns The call params
@@ -680,6 +716,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `createPayroll()void` ABI method.
      *
+     * Create payroll system
+     *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
@@ -689,6 +727,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `addEmployee()void` ABI method.
+     *
+     * Add employee to payroll
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
@@ -700,6 +740,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `removeEmployee()void` ABI method.
      *
+     * Remove employee from payroll
+     *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
@@ -709,6 +751,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `fundApp()void` ABI method.
+     *
+     * Fund the application
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
@@ -720,6 +764,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `disburse()void` ABI method.
      *
+     * Disburse payments to employees
+     *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
@@ -729,6 +775,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `pauseEmployee()void` ABI method.
+     *
+     * Pause or unpause an employee
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
@@ -740,6 +788,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo()void` ABI method.
      *
+     * Get employee information
+     *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
@@ -750,6 +800,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `getPayrollInfo()void` ABI method.
      *
+     * Get payroll information
+     *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
@@ -759,6 +811,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `getTotalEmployees()void` ABI method.
+     *
+     * Get total number of employees
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
@@ -786,6 +840,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `createPayroll()void` ABI method.
      *
+     * Create payroll system
+     *
      * @param params The params for the smart contract call
      * @returns The call result
      */
@@ -796,6 +852,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `addEmployee()void` ABI method.
+     *
+     * Add employee to payroll
      *
      * @param params The params for the smart contract call
      * @returns The call result
@@ -808,6 +866,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `removeEmployee()void` ABI method.
      *
+     * Remove employee from payroll
+     *
      * @param params The params for the smart contract call
      * @returns The call result
      */
@@ -818,6 +878,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `fundApp()void` ABI method.
+     *
+     * Fund the application
      *
      * @param params The params for the smart contract call
      * @returns The call result
@@ -830,6 +892,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `disburse()void` ABI method.
      *
+     * Disburse payments to employees
+     *
      * @param params The params for the smart contract call
      * @returns The call result
      */
@@ -840,6 +904,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `pauseEmployee()void` ABI method.
+     *
+     * Pause or unpause an employee
      *
      * @param params The params for the smart contract call
      * @returns The call result
@@ -852,6 +918,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo()void` ABI method.
      *
+     * Get employee information
+     *
      * @param params The params for the smart contract call
      * @returns The call result
      */
@@ -863,6 +931,8 @@ export class PayrollAppClient {
     /**
      * Makes a call to the PayrollApp smart contract using the `getPayrollInfo()void` ABI method.
      *
+     * Get payroll information
+     *
      * @param params The params for the smart contract call
      * @returns The call result
      */
@@ -873,6 +943,8 @@ export class PayrollAppClient {
 
     /**
      * Makes a call to the PayrollApp smart contract using the `getTotalEmployees()void` ABI method.
+     *
+     * Get total number of employees
      *
      * @param params The params for the smart contract call
      * @returns The call result
@@ -1016,6 +1088,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
    * Calls the createPayroll()void ABI method.
    *
+   * Create payroll system
+   *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
@@ -1024,6 +1098,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
 
   /**
    * Calls the addEmployee()void ABI method.
+   *
+   * Add employee to payroll
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
@@ -1034,6 +1110,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
    * Calls the removeEmployee()void ABI method.
    *
+   * Remove employee from payroll
+   *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
@@ -1042,6 +1120,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
 
   /**
    * Calls the fundApp()void ABI method.
+   *
+   * Fund the application
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
@@ -1052,6 +1132,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
    * Calls the disburse()void ABI method.
    *
+   * Disburse payments to employees
+   *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
@@ -1060,6 +1142,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
 
   /**
    * Calls the pauseEmployee()void ABI method.
+   *
+   * Pause or unpause an employee
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
@@ -1070,6 +1154,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
    * Calls the getEmployeeInfo()void ABI method.
    *
+   * Get employee information
+   *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
@@ -1079,6 +1165,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
    * Calls the getPayrollInfo()void ABI method.
    *
+   * Get payroll information
+   *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
@@ -1087,6 +1175,8 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
 
   /**
    * Calls the getTotalEmployees()void ABI method.
+   *
+   * Get total number of employees
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call

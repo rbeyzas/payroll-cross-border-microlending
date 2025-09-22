@@ -1,10 +1,53 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useWallet } from '@txnlab/use-wallet-react'
+import { AlgorandClient } from '@algorandfoundation/algokit-utils'
+import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
 const Navbar: React.FC = () => {
   const { activeAddress } = useWallet()
   const location = useLocation()
+  const [balance, setBalance] = useState<number>(0)
+  const [loadingBalance, setLoadingBalance] = useState(false)
+
+  // Fetch account balance
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!activeAddress) {
+        setBalance(0)
+        return
+      }
+
+      setLoadingBalance(true)
+      try {
+        // Use the same config method as Transact component
+        const algodConfig = getAlgodConfigFromViteEnvironment()
+        const algorand = AlgorandClient.fromConfig({ algodConfig })
+
+        console.log('Fetching balance for address:', activeAddress)
+        console.log('Algorand client config:', algodConfig)
+
+        const accountInfo = await algorand.account.getInformation(activeAddress)
+        console.log('Account info:', accountInfo)
+        console.log('Raw amount:', accountInfo.amount)
+        console.log('Network:', algodConfig.server)
+        console.log('Address on testnet explorer:', `https://testnet.algoexplorer.io/address/${activeAddress}`)
+
+        setBalance(Number(accountInfo.amount))
+      } catch (error) {
+        console.error('Error fetching balance:', error)
+        setBalance(0)
+      } finally {
+        setLoadingBalance(false)
+      }
+    }
+
+    fetchBalance()
+
+    // Refresh balance every 30 seconds
+    const interval = setInterval(fetchBalance, 30000)
+    return () => clearInterval(interval)
+  }, [activeAddress])
 
   return (
     <nav className="bg-white shadow-lg border-b border-gray-200">
@@ -58,17 +101,28 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Connect Wallet Button */}
+          {/* Connect Wallet Button & Balance */}
           <div className="flex items-center space-x-4">
             {activeAddress ? (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-4">
+                {/* Balance Display */}
+                <div className="flex items-center space-x-2 bg-gray-50 px-3 py-2 rounded-lg">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="text-sm">
+                    <span className="text-gray-600 font-medium">Balance:</span>
+                    <span className="ml-1 font-bold text-gray-900">
+                      {loadingBalance ? <span className="text-gray-400">Loading...</span> : `${(balance / 1000000).toFixed(2)} ALGO`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Address Display */}
                 <div className="text-sm text-gray-600">
                   <span className="font-medium">Connected:</span>
                   <span className="ml-1 font-mono text-xs">
                     {activeAddress.slice(0, 6)}...{activeAddress.slice(-4)}
                   </span>
                 </div>
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               </div>
             ) : (
               <Link

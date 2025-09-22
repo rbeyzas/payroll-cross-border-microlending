@@ -9,9 +9,15 @@ const ConnectWalletPage: React.FC = () => {
 
   const handleConnect = async (wallet: any) => {
     try {
-      // In a real implementation, you would connect to the wallet
       console.log('Connecting to wallet:', wallet)
-      navigate('/')
+
+      // Connect to the wallet
+      await wallet.connect()
+
+      // Wait a moment for the connection to establish
+      setTimeout(() => {
+        navigate('/')
+      }, 1000)
     } catch (error) {
       console.error('Connection failed:', error)
     }
@@ -19,8 +25,14 @@ const ConnectWalletPage: React.FC = () => {
 
   const handleDisconnect = async () => {
     try {
-      // In a real implementation, you would disconnect from the wallet
       console.log('Disconnecting wallet')
+
+      // Find the connected wallet and disconnect
+      const connectedWallet = wallets?.find((w) => w.isConnected)
+      if (connectedWallet) {
+        await connectedWallet.disconnect()
+      }
+
       navigate('/')
     } catch (error) {
       console.error('Disconnection failed:', error)

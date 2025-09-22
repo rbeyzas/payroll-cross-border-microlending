@@ -126,6 +126,9 @@ def disburse() -> Expr:
         Assert(Txn.sender() == App.globalGet(ADMIN_KEY)),
         Assert(batch_size > Int(0)),
         
+        # Update last disbursement timestamp
+        App.globalPut(LAST_DISBURSEMENT_KEY, Global.latest_timestamp()),
+        
         # TODO: Implement batch disbursement logic
         # This would require iterating through employees and creating payment transactions
         # For now, just approve
