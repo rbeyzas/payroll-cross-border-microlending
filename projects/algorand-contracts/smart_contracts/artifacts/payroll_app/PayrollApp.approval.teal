@@ -8,7 +8,7 @@ main:
     // export class PayrollApp extends Contract {
     txn NumAppArgs
     bz main_bare_routing@14
-    pushbytess 0xa65c1d8c 0x8c59de01 0xcd56410f 0xfa5556ec 0x698736ad 0xc94f42f0 0x8ca3bd8b 0xfa344379 0xc2466f9a // method "createPayroll()void", method "addEmployee()void", method "removeEmployee()void", method "fundApp()void", method "disburse()void", method "pauseEmployee()void", method "getEmployeeInfo()void", method "getPayrollInfo()void", method "getTotalEmployees()void"
+    pushbytess 0x399ae41f 0xe88a7b70 0x25a833b9 0x0e1d1109 0x698736ad 0x7454d075 0xd29d25c0 0xfa344379 0xc2466f9a // method "createPayroll(string,string,string)void", method "addEmployee(string,string)void", method "removeEmployee(string)void", method "fundApp(string)void", method "disburse()void", method "pauseEmployee(string,string)void", method "getEmployeeInfo(string)string", method "getPayrollInfo()void", method "getTotalEmployees()void"
     txna ApplicationArgs 0
     match main_createPayroll_route@3 main_addEmployee_route@4 main_removeEmployee_route@5 main_fundApp_route@6 main_disburse_route@7 main_pauseEmployee_route@8 main_getEmployeeInfo_route@9 main_getPayrollInfo_route@10 main_getTotalEmployees_route@11
 
@@ -19,7 +19,7 @@ main_after_if_else@18:
     return
 
 main_getTotalEmployees_route@11:
-    // smart_contracts/payroll_app/contract.algo.ts:63
+    // smart_contracts/payroll_app/contract.algo.ts:75
     // public getTotalEmployees(): void {
     txn OnCompletion
     !
@@ -30,7 +30,7 @@ main_getTotalEmployees_route@11:
     return
 
 main_getPayrollInfo_route@10:
-    // smart_contracts/payroll_app/contract.algo.ts:56
+    // smart_contracts/payroll_app/contract.algo.ts:68
     // public getPayrollInfo(): void {
     txn OnCompletion
     !
@@ -41,19 +41,21 @@ main_getPayrollInfo_route@10:
     return
 
 main_getEmployeeInfo_route@9:
-    // smart_contracts/payroll_app/contract.algo.ts:49
-    // public getEmployeeInfo(): void {
+    // smart_contracts/payroll_app/contract.algo.ts:60
+    // public getEmployeeInfo(employeeAddress: string): string {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
+    pushbytes 0x151f7c7500096e6f745f666f756e64
+    log
     intc_0 // 1
     return
 
 main_pauseEmployee_route@8:
-    // smart_contracts/payroll_app/contract.algo.ts:42
-    // public pauseEmployee(): void {
+    // smart_contracts/payroll_app/contract.algo.ts:51
+    // public pauseEmployee(employeeAddress: string, paused: string): void {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -63,7 +65,7 @@ main_pauseEmployee_route@8:
     return
 
 main_disburse_route@7:
-    // smart_contracts/payroll_app/contract.algo.ts:35
+    // smart_contracts/payroll_app/contract.algo.ts:42
     // public disburse(): void {
     txn OnCompletion
     !
@@ -74,8 +76,8 @@ main_disburse_route@7:
     return
 
 main_fundApp_route@6:
-    // smart_contracts/payroll_app/contract.algo.ts:28
-    // public fundApp(): void {
+    // smart_contracts/payroll_app/contract.algo.ts:35
+    // public fundApp(amount: string): void {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -85,8 +87,8 @@ main_fundApp_route@6:
     return
 
 main_removeEmployee_route@5:
-    // smart_contracts/payroll_app/contract.algo.ts:21
-    // public removeEmployee(): void {
+    // smart_contracts/payroll_app/contract.algo.ts:27
+    // public removeEmployee(employeeAddress: string): void {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -96,8 +98,8 @@ main_removeEmployee_route@5:
     return
 
 main_addEmployee_route@4:
-    // smart_contracts/payroll_app/contract.algo.ts:14
-    // public addEmployee(): void {
+    // smart_contracts/payroll_app/contract.algo.ts:19
+    // public addEmployee(employeeAddress: string, amount: string): void {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
@@ -107,8 +109,8 @@ main_addEmployee_route@4:
     return
 
 main_createPayroll_route@3:
-    // smart_contracts/payroll_app/contract.algo.ts:7
-    // public createPayroll(): void {
+    // smart_contracts/payroll_app/contract.algo.ts:10
+    // public createPayroll(asaId: string, cycleSecs: string, adminAddress: string): void {
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp

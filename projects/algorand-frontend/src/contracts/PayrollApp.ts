@@ -22,9 +22,8 @@ import { AppFactory as _AppFactory, AppFactoryAppClientParams, AppFactoryResolve
 import { TransactionComposer, AppCallMethodCall, AppMethodCallTransactionArgument, SimulateOptions, RawSimulateOptions, SkipSignaturesSimulateOptions } from '@algorandfoundation/algokit-utils/types/composer'
 import { SendParams, SendSingleTransactionResult, SendAtomicTransactionComposerResults } from '@algorandfoundation/algokit-utils/types/transaction'
 import { Address, encodeAddress, modelsv2, OnApplicationComplete, Transaction, TransactionSigner } from 'algosdk'
-import SimulateResponse = modelsv2.SimulateResponse
 
-export const APP_SPEC: Arc56Contract = {"name":"PayrollApp","structs":{},"methods":[{"name":"createPayroll","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Create payroll system","events":[],"recommendations":{}},{"name":"addEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Add employee to payroll","events":[],"recommendations":{}},{"name":"removeEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Remove employee from payroll","events":[],"recommendations":{}},{"name":"fundApp","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Fund the application","events":[],"recommendations":{}},{"name":"disburse","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Disburse payments to employees","events":[],"recommendations":{}},{"name":"pauseEmployee","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Pause or unpause an employee","events":[],"recommendations":{}},{"name":"getEmployeeInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get employee information","events":[],"recommendations":{}},{"name":"getPayrollInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get payroll information","events":[],"recommendations":{}},{"name":"getTotalEmployees","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get total number of employees","events":[],"recommendations":{}}],"arcs":[22,28],"networks":{},"state":{"schema":{"global":{"ints":0,"bytes":0},"local":{"ints":0,"bytes":0}},"keys":{"global":{},"local":{},"box":{}},"maps":{"global":{},"local":{},"box":{}}},"bareActions":{"create":["NoOp"],"call":[]},"sourceInfo":{"approval":{"sourceInfo":[{"pc":[85,94,103,112,121,130,139,148,157],"errorMessage":"OnCompletion is not NoOp"},{"pc":[171],"errorMessage":"can only call when creating"},{"pc":[88,97,106,115,124,133,142,151,160],"errorMessage":"can only call when not creating"}],"pcOffsetMethod":"none"},"clear":{"sourceInfo":[],"pcOffsetMethod":"none"}},"source":{"approval":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMQogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MwogICAgLy8gZXhwb3J0IGNsYXNzIFBheXJvbGxBcHAgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdAMTQKICAgIHB1c2hieXRlc3MgMHhhNjVjMWQ4YyAweDhjNTlkZTAxIDB4Y2Q1NjQxMGYgMHhmYTU1NTZlYyAweDY5ODczNmFkIDB4Yzk0ZjQyZjAgMHg4Y2EzYmQ4YiAweGZhMzQ0Mzc5IDB4YzI0NjZmOWEgLy8gbWV0aG9kICJjcmVhdGVQYXlyb2xsKCl2b2lkIiwgbWV0aG9kICJhZGRFbXBsb3llZSgpdm9pZCIsIG1ldGhvZCAicmVtb3ZlRW1wbG95ZWUoKXZvaWQiLCBtZXRob2QgImZ1bmRBcHAoKXZvaWQiLCBtZXRob2QgImRpc2J1cnNlKCl2b2lkIiwgbWV0aG9kICJwYXVzZUVtcGxveWVlKCl2b2lkIiwgbWV0aG9kICJnZXRFbXBsb3llZUluZm8oKXZvaWQiLCBtZXRob2QgImdldFBheXJvbGxJbmZvKCl2b2lkIiwgbWV0aG9kICJnZXRUb3RhbEVtcGxveWVlcygpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzIG1haW5fYWRkRW1wbG95ZWVfcm91dGVANCBtYWluX3JlbW92ZUVtcGxveWVlX3JvdXRlQDUgbWFpbl9mdW5kQXBwX3JvdXRlQDYgbWFpbl9kaXNidXJzZV9yb3V0ZUA3IG1haW5fcGF1c2VFbXBsb3llZV9yb3V0ZUA4IG1haW5fZ2V0RW1wbG95ZWVJbmZvX3JvdXRlQDkgbWFpbl9nZXRQYXlyb2xsSW5mb19yb3V0ZUAxMCBtYWluX2dldFRvdGFsRW1wbG95ZWVzX3JvdXRlQDExCgptYWluX2FmdGVyX2lmX2Vsc2VAMTg6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czozCiAgICAvLyBleHBvcnQgY2xhc3MgUGF5cm9sbEFwcCBleHRlbmRzIENvbnRyYWN0IHsKICAgIHB1c2hpbnQgMCAvLyAwCiAgICByZXR1cm4KCm1haW5fZ2V0VG90YWxFbXBsb3llZXNfcm91dGVAMTE6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czo2MwogICAgLy8gcHVibGljIGdldFRvdGFsRW1wbG95ZWVzKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2dldFBheXJvbGxJbmZvX3JvdXRlQDEwOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6NTYKICAgIC8vIHB1YmxpYyBnZXRQYXlyb2xsSW5mbygpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9nZXRFbXBsb3llZUluZm9fcm91dGVAOToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjQ5CiAgICAvLyBwdWJsaWMgZ2V0RW1wbG95ZWVJbmZvKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3BhdXNlRW1wbG95ZWVfcm91dGVAODoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjQyCiAgICAvLyBwdWJsaWMgcGF1c2VFbXBsb3llZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9kaXNidXJzZV9yb3V0ZUA3OgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MzUKICAgIC8vIHB1YmxpYyBkaXNidXJzZSgpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9mdW5kQXBwX3JvdXRlQDY6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czoyOAogICAgLy8gcHVibGljIGZ1bmRBcHAoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fcmVtb3ZlRW1wbG95ZWVfcm91dGVANToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjIxCiAgICAvLyBwdWJsaWMgcmVtb3ZlRW1wbG95ZWUoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYWRkRW1wbG95ZWVfcm91dGVANDoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjE0CiAgICAvLyBwdWJsaWMgYWRkRW1wbG95ZWUoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6NwogICAgLy8gcHVibGljIGNyZWF0ZVBheXJvbGwoKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYmFyZV9yb3V0aW5nQDE0OgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MwogICAgLy8gZXhwb3J0IGNsYXNzIFBheXJvbGxBcHAgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICBibnogbWFpbl9hZnRlcl9pZl9lbHNlQDE4CiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgIQogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgo=","clear":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="},"byteCode":{"approval":"CiABATEbQQCaggkEplwdjASMWd4BBM1WQQ8E+lVW7ARphzatBMlPQvAEjKO9iwT6NEN5BMJGb5o2GgCOCQBLAEIAOQAwACcAHgAVAAwAA4EAQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZQP+nMRgURCJD","clear":"CoEBQw=="},"compilerInfo":{"compiler":"puya","compilerVersion":{"major":4,"minor":7,"patch":0}},"events":[],"templateVariables":{}} as unknown as Arc56Contract
+export const APP_SPEC: Arc56Contract = {"name":"PayrollApp","structs":{},"methods":[{"name":"createPayroll","args":[{"type":"string","name":"asaId","desc":"ASA ID for payments (0 for ALGO)"},{"type":"string","name":"cycleSecs","desc":"Payment cycle in seconds"},{"type":"string","name":"adminAddress","desc":"Admin address who can manage employees"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Create payroll system (initialize after deployment)","events":[],"recommendations":{}},{"name":"addEmployee","args":[{"type":"string","name":"employeeAddress","desc":"Employee's Algorand address"},{"type":"string","name":"amount","desc":"Employee's salary in microALGO"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Add employee to payroll","events":[],"recommendations":{}},{"name":"removeEmployee","args":[{"type":"string","name":"employeeAddress","desc":"Employee's Algorand address"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Remove employee from payroll","events":[],"recommendations":{}},{"name":"fundApp","args":[{"type":"string","name":"amount","desc":"Amount to fund in microALGO"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Fund the application with ALGO or ASA","events":[],"recommendations":{}},{"name":"disburse","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Disburse payments to employees","events":[],"recommendations":{}},{"name":"pauseEmployee","args":[{"type":"string","name":"employeeAddress","desc":"Employee's Algorand address"},{"type":"string","name":"paused","desc":"Whether employee is paused (true/false)"}],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Pause or unpause an employee","events":[],"recommendations":{}},{"name":"getEmployeeInfo","args":[{"type":"string","name":"employeeAddress","desc":"Employee's Algorand address"}],"returns":{"type":"string","desc":"Employee info as \"name,salary,paused\" string"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get employee information from Box Storage","events":[],"recommendations":{}},{"name":"getPayrollInfo","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get payroll information","events":[],"recommendations":{}},{"name":"getTotalEmployees","args":[],"returns":{"type":"void"},"actions":{"create":[],"call":["NoOp"]},"readonly":false,"desc":"Get total number of employees","events":[],"recommendations":{}}],"arcs":[22,28],"networks":{},"state":{"schema":{"global":{"ints":0,"bytes":0},"local":{"ints":0,"bytes":0}},"keys":{"global":{},"local":{},"box":{}},"maps":{"global":{},"local":{},"box":{}}},"bareActions":{"create":["NoOp"],"call":[]},"sourceInfo":{"approval":{"sourceInfo":[{"pc":[85,94,103,130,139,148,157,166,175],"errorMessage":"OnCompletion is not NoOp"},{"pc":[189],"errorMessage":"can only call when creating"},{"pc":[88,97,106,133,142,151,160,169,178],"errorMessage":"can only call when not creating"}],"pcOffsetMethod":"none"},"clear":{"sourceInfo":[],"pcOffsetMethod":"none"}},"source":{"approval":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYXJjNC9pbmRleC5kLnRzOjpDb250cmFjdC5hcHByb3ZhbFByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBpbnRjYmxvY2sgMQogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MwogICAgLy8gZXhwb3J0IGNsYXNzIFBheXJvbGxBcHAgZXh0ZW5kcyBDb250cmFjdCB7CiAgICB0eG4gTnVtQXBwQXJncwogICAgYnogbWFpbl9iYXJlX3JvdXRpbmdAMTQKICAgIHB1c2hieXRlc3MgMHgzOTlhZTQxZiAweGU4OGE3YjcwIDB4MjVhODMzYjkgMHgwZTFkMTEwOSAweDY5ODczNmFkIDB4NzQ1NGQwNzUgMHhkMjlkMjVjMCAweGZhMzQ0Mzc5IDB4YzI0NjZmOWEgLy8gbWV0aG9kICJjcmVhdGVQYXlyb2xsKHN0cmluZyxzdHJpbmcsc3RyaW5nKXZvaWQiLCBtZXRob2QgImFkZEVtcGxveWVlKHN0cmluZyxzdHJpbmcpdm9pZCIsIG1ldGhvZCAicmVtb3ZlRW1wbG95ZWUoc3RyaW5nKXZvaWQiLCBtZXRob2QgImZ1bmRBcHAoc3RyaW5nKXZvaWQiLCBtZXRob2QgImRpc2J1cnNlKCl2b2lkIiwgbWV0aG9kICJwYXVzZUVtcGxveWVlKHN0cmluZyxzdHJpbmcpdm9pZCIsIG1ldGhvZCAiZ2V0RW1wbG95ZWVJbmZvKHN0cmluZylzdHJpbmciLCBtZXRob2QgImdldFBheXJvbGxJbmZvKCl2b2lkIiwgbWV0aG9kICJnZXRUb3RhbEVtcGxveWVlcygpdm9pZCIKICAgIHR4bmEgQXBwbGljYXRpb25BcmdzIDAKICAgIG1hdGNoIG1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzIG1haW5fYWRkRW1wbG95ZWVfcm91dGVANCBtYWluX3JlbW92ZUVtcGxveWVlX3JvdXRlQDUgbWFpbl9mdW5kQXBwX3JvdXRlQDYgbWFpbl9kaXNidXJzZV9yb3V0ZUA3IG1haW5fcGF1c2VFbXBsb3llZV9yb3V0ZUA4IG1haW5fZ2V0RW1wbG95ZWVJbmZvX3JvdXRlQDkgbWFpbl9nZXRQYXlyb2xsSW5mb19yb3V0ZUAxMCBtYWluX2dldFRvdGFsRW1wbG95ZWVzX3JvdXRlQDExCgptYWluX2FmdGVyX2lmX2Vsc2VAMTg6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czozCiAgICAvLyBleHBvcnQgY2xhc3MgUGF5cm9sbEFwcCBleHRlbmRzIENvbnRyYWN0IHsKICAgIHB1c2hpbnQgMCAvLyAwCiAgICByZXR1cm4KCm1haW5fZ2V0VG90YWxFbXBsb3llZXNfcm91dGVAMTE6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czo3NQogICAgLy8gcHVibGljIGdldFRvdGFsRW1wbG95ZWVzKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2dldFBheXJvbGxJbmZvX3JvdXRlQDEwOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6NjgKICAgIC8vIHB1YmxpYyBnZXRQYXlyb2xsSW5mbygpOiB2b2lkIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgaW50Y18wIC8vIDEKICAgIHJldHVybgoKbWFpbl9nZXRFbXBsb3llZUluZm9fcm91dGVAOToKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjYwCiAgICAvLyBwdWJsaWMgZ2V0RW1wbG95ZWVJbmZvKGVtcGxveWVlQWRkcmVzczogc3RyaW5nKTogc3RyaW5nIHsKICAgIHR4biBPbkNvbXBsZXRpb24KICAgICEKICAgIGFzc2VydCAvLyBPbkNvbXBsZXRpb24gaXMgbm90IE5vT3AKICAgIHR4biBBcHBsaWNhdGlvbklECiAgICBhc3NlcnQgLy8gY2FuIG9ubHkgY2FsbCB3aGVuIG5vdCBjcmVhdGluZwogICAgcHVzaGJ5dGVzIDB4MTUxZjdjNzUwMDA5NmU2Zjc0NWY2NjZmNzU2ZTY0CiAgICBsb2cKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fcGF1c2VFbXBsb3llZV9yb3V0ZUA4OgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6NTEKICAgIC8vIHB1YmxpYyBwYXVzZUVtcGxveWVlKGVtcGxveWVlQWRkcmVzczogc3RyaW5nLCBwYXVzZWQ6IHN0cmluZyk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2Rpc2J1cnNlX3JvdXRlQDc6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czo0MgogICAgLy8gcHVibGljIGRpc2J1cnNlKCk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2Z1bmRBcHBfcm91dGVANjoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjM1CiAgICAvLyBwdWJsaWMgZnVuZEFwcChhbW91bnQ6IHN0cmluZyk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX3JlbW92ZUVtcGxveWVlX3JvdXRlQDU6CiAgICAvLyBzbWFydF9jb250cmFjdHMvcGF5cm9sbF9hcHAvY29udHJhY3QuYWxnby50czoyNwogICAgLy8gcHVibGljIHJlbW92ZUVtcGxveWVlKGVtcGxveWVlQWRkcmVzczogc3RyaW5nKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fYWRkRW1wbG95ZWVfcm91dGVANDoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjE5CiAgICAvLyBwdWJsaWMgYWRkRW1wbG95ZWUoZW1wbG95ZWVBZGRyZXNzOiBzdHJpbmcsIGFtb3VudDogc3RyaW5nKTogdm9pZCB7CiAgICB0eG4gT25Db21wbGV0aW9uCiAgICAhCiAgICBhc3NlcnQgLy8gT25Db21wbGV0aW9uIGlzIG5vdCBOb09wCiAgICB0eG4gQXBwbGljYXRpb25JRAogICAgYXNzZXJ0IC8vIGNhbiBvbmx5IGNhbGwgd2hlbiBub3QgY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4KCm1haW5fY3JlYXRlUGF5cm9sbF9yb3V0ZUAzOgogICAgLy8gc21hcnRfY29udHJhY3RzL3BheXJvbGxfYXBwL2NvbnRyYWN0LmFsZ28udHM6MTAKICAgIC8vIHB1YmxpYyBjcmVhdGVQYXlyb2xsKGFzYUlkOiBzdHJpbmcsIGN5Y2xlU2Vjczogc3RyaW5nLCBhZG1pbkFkZHJlc3M6IHN0cmluZyk6IHZvaWQgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgIQogICAgYXNzZXJ0IC8vIE9uQ29tcGxldGlvbiBpcyBub3QgTm9PcAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gbm90IGNyZWF0aW5nCiAgICBpbnRjXzAgLy8gMQogICAgcmV0dXJuCgptYWluX2JhcmVfcm91dGluZ0AxNDoKICAgIC8vIHNtYXJ0X2NvbnRyYWN0cy9wYXlyb2xsX2FwcC9jb250cmFjdC5hbGdvLnRzOjMKICAgIC8vIGV4cG9ydCBjbGFzcyBQYXlyb2xsQXBwIGV4dGVuZHMgQ29udHJhY3QgewogICAgdHhuIE9uQ29tcGxldGlvbgogICAgYm56IG1haW5fYWZ0ZXJfaWZfZWxzZUAxOAogICAgdHhuIEFwcGxpY2F0aW9uSUQKICAgICEKICAgIGFzc2VydCAvLyBjYW4gb25seSBjYWxsIHdoZW4gY3JlYXRpbmcKICAgIGludGNfMCAvLyAxCiAgICByZXR1cm4K","clear":"I3ByYWdtYSB2ZXJzaW9uIDEwCiNwcmFnbWEgdHlwZXRyYWNrIGZhbHNlCgovLyBAYWxnb3JhbmRmb3VuZGF0aW9uL2FsZ29yYW5kLXR5cGVzY3JpcHQvYmFzZS1jb250cmFjdC5kLnRzOjpCYXNlQ29udHJhY3QuY2xlYXJTdGF0ZVByb2dyYW0oKSAtPiB1aW50NjQ6Cm1haW46CiAgICBwdXNoaW50IDEgLy8gMQogICAgcmV0dXJuCg=="},"byteCode":{"approval":"CiABATEbQQCsggkEOZrkHwTointwBCWoM7kEDh0RCQRphzatBHRU0HUE0p0lwAT6NEN5BMJGb5o2GgCOCQBdAFQASwBCADkAMAAVAAwAA4EAQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGESADxUffHUACW5vdF9mb3VuZLAiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZFEQxGEQiQzEZQP+VMRgURCJD","clear":"CoEBQw=="},"events":[],"templateVariables":{}} as unknown as Arc56Contract
 
 /**
  * A state record containing binary data
@@ -71,13 +70,59 @@ export type PayrollAppArgs = {
    * The object representation of the arguments for each method
    */
   obj: {
-    'createPayroll()void': Record<string, never>
-    'addEmployee()void': Record<string, never>
-    'removeEmployee()void': Record<string, never>
-    'fundApp()void': Record<string, never>
+    'createPayroll(string,string,string)void': {
+      /**
+       * ASA ID for payments (0 for ALGO)
+       */
+      asaId: string
+      /**
+       * Payment cycle in seconds
+       */
+      cycleSecs: string
+      /**
+       * Admin address who can manage employees
+       */
+      adminAddress: string
+    }
+    'addEmployee(string,string)void': {
+      /**
+       * Employee's Algorand address
+       */
+      employeeAddress: string
+      /**
+       * Employee's salary in microALGO
+       */
+      amount: string
+    }
+    'removeEmployee(string)void': {
+      /**
+       * Employee's Algorand address
+       */
+      employeeAddress: string
+    }
+    'fundApp(string)void': {
+      /**
+       * Amount to fund in microALGO
+       */
+      amount: string
+    }
     'disburse()void': Record<string, never>
-    'pauseEmployee()void': Record<string, never>
-    'getEmployeeInfo()void': Record<string, never>
+    'pauseEmployee(string,string)void': {
+      /**
+       * Employee's Algorand address
+       */
+      employeeAddress: string
+      /**
+       * Whether employee is paused (true/false)
+       */
+      paused: string
+    }
+    'getEmployeeInfo(string)string': {
+      /**
+       * Employee's Algorand address
+       */
+      employeeAddress: string
+    }
     'getPayrollInfo()void': Record<string, never>
     'getTotalEmployees()void': Record<string, never>
   }
@@ -85,13 +130,13 @@ export type PayrollAppArgs = {
    * The tuple representation of the arguments for each method
    */
   tuple: {
-    'createPayroll()void': []
-    'addEmployee()void': []
-    'removeEmployee()void': []
-    'fundApp()void': []
+    'createPayroll(string,string,string)void': [asaId: string, cycleSecs: string, adminAddress: string]
+    'addEmployee(string,string)void': [employeeAddress: string, amount: string]
+    'removeEmployee(string)void': [employeeAddress: string]
+    'fundApp(string)void': [amount: string]
     'disburse()void': []
-    'pauseEmployee()void': []
-    'getEmployeeInfo()void': []
+    'pauseEmployee(string,string)void': [employeeAddress: string, paused: string]
+    'getEmployeeInfo(string)string': [employeeAddress: string]
     'getPayrollInfo()void': []
     'getTotalEmployees()void': []
   }
@@ -101,13 +146,13 @@ export type PayrollAppArgs = {
  * The return type for each method
  */
 export type PayrollAppReturns = {
-  'createPayroll()void': void
-  'addEmployee()void': void
-  'removeEmployee()void': void
-  'fundApp()void': void
+  'createPayroll(string,string,string)void': void
+  'addEmployee(string,string)void': void
+  'removeEmployee(string)void': void
+  'fundApp(string)void': void
   'disburse()void': void
-  'pauseEmployee()void': void
-  'getEmployeeInfo()void': void
+  'pauseEmployee(string,string)void': void
+  'getEmployeeInfo(string)string': string
   'getPayrollInfo()void': void
   'getTotalEmployees()void': void
 }
@@ -120,40 +165,43 @@ export type PayrollAppTypes = {
    * Maps method signatures / names to their argument and return types.
    */
   methods:
-    & Record<'createPayroll()void' | 'createPayroll', {
-      argsObj: PayrollAppArgs['obj']['createPayroll()void']
-      argsTuple: PayrollAppArgs['tuple']['createPayroll()void']
-      returns: PayrollAppReturns['createPayroll()void']
+    & Record<'createPayroll(string,string,string)void' | 'createPayroll', {
+      argsObj: PayrollAppArgs['obj']['createPayroll(string,string,string)void']
+      argsTuple: PayrollAppArgs['tuple']['createPayroll(string,string,string)void']
+      returns: PayrollAppReturns['createPayroll(string,string,string)void']
     }>
-    & Record<'addEmployee()void' | 'addEmployee', {
-      argsObj: PayrollAppArgs['obj']['addEmployee()void']
-      argsTuple: PayrollAppArgs['tuple']['addEmployee()void']
-      returns: PayrollAppReturns['addEmployee()void']
+    & Record<'addEmployee(string,string)void' | 'addEmployee', {
+      argsObj: PayrollAppArgs['obj']['addEmployee(string,string)void']
+      argsTuple: PayrollAppArgs['tuple']['addEmployee(string,string)void']
+      returns: PayrollAppReturns['addEmployee(string,string)void']
     }>
-    & Record<'removeEmployee()void' | 'removeEmployee', {
-      argsObj: PayrollAppArgs['obj']['removeEmployee()void']
-      argsTuple: PayrollAppArgs['tuple']['removeEmployee()void']
-      returns: PayrollAppReturns['removeEmployee()void']
+    & Record<'removeEmployee(string)void' | 'removeEmployee', {
+      argsObj: PayrollAppArgs['obj']['removeEmployee(string)void']
+      argsTuple: PayrollAppArgs['tuple']['removeEmployee(string)void']
+      returns: PayrollAppReturns['removeEmployee(string)void']
     }>
-    & Record<'fundApp()void' | 'fundApp', {
-      argsObj: PayrollAppArgs['obj']['fundApp()void']
-      argsTuple: PayrollAppArgs['tuple']['fundApp()void']
-      returns: PayrollAppReturns['fundApp()void']
+    & Record<'fundApp(string)void' | 'fundApp', {
+      argsObj: PayrollAppArgs['obj']['fundApp(string)void']
+      argsTuple: PayrollAppArgs['tuple']['fundApp(string)void']
+      returns: PayrollAppReturns['fundApp(string)void']
     }>
     & Record<'disburse()void' | 'disburse', {
       argsObj: PayrollAppArgs['obj']['disburse()void']
       argsTuple: PayrollAppArgs['tuple']['disburse()void']
       returns: PayrollAppReturns['disburse()void']
     }>
-    & Record<'pauseEmployee()void' | 'pauseEmployee', {
-      argsObj: PayrollAppArgs['obj']['pauseEmployee()void']
-      argsTuple: PayrollAppArgs['tuple']['pauseEmployee()void']
-      returns: PayrollAppReturns['pauseEmployee()void']
+    & Record<'pauseEmployee(string,string)void' | 'pauseEmployee', {
+      argsObj: PayrollAppArgs['obj']['pauseEmployee(string,string)void']
+      argsTuple: PayrollAppArgs['tuple']['pauseEmployee(string,string)void']
+      returns: PayrollAppReturns['pauseEmployee(string,string)void']
     }>
-    & Record<'getEmployeeInfo()void' | 'getEmployeeInfo', {
-      argsObj: PayrollAppArgs['obj']['getEmployeeInfo()void']
-      argsTuple: PayrollAppArgs['tuple']['getEmployeeInfo()void']
-      returns: PayrollAppReturns['getEmployeeInfo()void']
+    & Record<'getEmployeeInfo(string)string' | 'getEmployeeInfo', {
+      argsObj: PayrollAppArgs['obj']['getEmployeeInfo(string)string']
+      argsTuple: PayrollAppArgs['tuple']['getEmployeeInfo(string)string']
+      /**
+       * Employee info as "name,salary,paused" string
+       */
+      returns: PayrollAppReturns['getEmployeeInfo(string)string']
     }>
     & Record<'getPayrollInfo()void' | 'getPayrollInfo', {
       argsObj: PayrollAppArgs['obj']['getPayrollInfo()void']
@@ -216,63 +264,63 @@ export type PayrollAppDeployParams = Expand<Omit<AppFactoryDeployParams, 'create
  */
 export abstract class PayrollAppParamsFactory {
   /**
-   * Constructs a no op call for the createPayroll()void ABI method
+   * Constructs a no op call for the createPayroll(string,string,string)void ABI method
    *
-   * Create payroll system
+   * Create payroll system (initialize after deployment)
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static createPayroll(params: CallParams<PayrollAppArgs['obj']['createPayroll()void'] | PayrollAppArgs['tuple']['createPayroll()void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static createPayroll(params: CallParams<PayrollAppArgs['obj']['createPayroll(string,string,string)void'] | PayrollAppArgs['tuple']['createPayroll(string,string,string)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'createPayroll()void' as const,
-      args: Array.isArray(params.args) ? params.args : [],
+      method: 'createPayroll(string,string,string)void' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.asaId, params.args.cycleSecs, params.args.adminAddress],
     }
   }
   /**
-   * Constructs a no op call for the addEmployee()void ABI method
+   * Constructs a no op call for the addEmployee(string,string)void ABI method
    *
    * Add employee to payroll
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static addEmployee(params: CallParams<PayrollAppArgs['obj']['addEmployee()void'] | PayrollAppArgs['tuple']['addEmployee()void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static addEmployee(params: CallParams<PayrollAppArgs['obj']['addEmployee(string,string)void'] | PayrollAppArgs['tuple']['addEmployee(string,string)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'addEmployee()void' as const,
-      args: Array.isArray(params.args) ? params.args : [],
+      method: 'addEmployee(string,string)void' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.employeeAddress, params.args.amount],
     }
   }
   /**
-   * Constructs a no op call for the removeEmployee()void ABI method
+   * Constructs a no op call for the removeEmployee(string)void ABI method
    *
    * Remove employee from payroll
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static removeEmployee(params: CallParams<PayrollAppArgs['obj']['removeEmployee()void'] | PayrollAppArgs['tuple']['removeEmployee()void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static removeEmployee(params: CallParams<PayrollAppArgs['obj']['removeEmployee(string)void'] | PayrollAppArgs['tuple']['removeEmployee(string)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'removeEmployee()void' as const,
-      args: Array.isArray(params.args) ? params.args : [],
+      method: 'removeEmployee(string)void' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.employeeAddress],
     }
   }
   /**
-   * Constructs a no op call for the fundApp()void ABI method
+   * Constructs a no op call for the fundApp(string)void ABI method
    *
-   * Fund the application
+   * Fund the application with ALGO or ASA
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static fundApp(params: CallParams<PayrollAppArgs['obj']['fundApp()void'] | PayrollAppArgs['tuple']['fundApp()void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static fundApp(params: CallParams<PayrollAppArgs['obj']['fundApp(string)void'] | PayrollAppArgs['tuple']['fundApp(string)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'fundApp()void' as const,
-      args: Array.isArray(params.args) ? params.args : [],
+      method: 'fundApp(string)void' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.amount],
     }
   }
   /**
@@ -291,33 +339,33 @@ export abstract class PayrollAppParamsFactory {
     }
   }
   /**
-   * Constructs a no op call for the pauseEmployee()void ABI method
+   * Constructs a no op call for the pauseEmployee(string,string)void ABI method
    *
    * Pause or unpause an employee
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static pauseEmployee(params: CallParams<PayrollAppArgs['obj']['pauseEmployee()void'] | PayrollAppArgs['tuple']['pauseEmployee()void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static pauseEmployee(params: CallParams<PayrollAppArgs['obj']['pauseEmployee(string,string)void'] | PayrollAppArgs['tuple']['pauseEmployee(string,string)void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'pauseEmployee()void' as const,
-      args: Array.isArray(params.args) ? params.args : [],
+      method: 'pauseEmployee(string,string)void' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.employeeAddress, params.args.paused],
     }
   }
   /**
-   * Constructs a no op call for the getEmployeeInfo()void ABI method
+   * Constructs a no op call for the getEmployeeInfo(string)string ABI method
    *
-   * Get employee information
+   * Get employee information from Box Storage
    *
    * @param params Parameters for the call
    * @returns An `AppClientMethodCallParams` object for the call
    */
-  static getEmployeeInfo(params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo()void'] | PayrollAppArgs['tuple']['getEmployeeInfo()void']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
+  static getEmployeeInfo(params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo(string)string'] | PayrollAppArgs['tuple']['getEmployeeInfo(string)string']> & CallOnComplete): AppClientMethodCallParams & CallOnComplete {
     return {
       ...params,
-      method: 'getEmployeeInfo()void' as const,
-      args: Array.isArray(params.args) ? params.args : [],
+      method: 'getEmployeeInfo(string)string' as const,
+      args: Array.isArray(params.args) ? params.args : [params.args.employeeAddress],
     }
   }
   /**
@@ -591,50 +639,50 @@ export class PayrollAppClient {
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `createPayroll()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `createPayroll(string,string,string)void` ABI method.
      *
-     * Create payroll system
+     * Create payroll system (initialize after deployment)
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    createPayroll: (params: CallParams<PayrollAppArgs['obj']['createPayroll()void'] | PayrollAppArgs['tuple']['createPayroll()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    createPayroll: (params: CallParams<PayrollAppArgs['obj']['createPayroll(string,string,string)void'] | PayrollAppArgs['tuple']['createPayroll(string,string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.params.call(PayrollAppParamsFactory.createPayroll(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `addEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `addEmployee(string,string)void` ABI method.
      *
      * Add employee to payroll
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    addEmployee: (params: CallParams<PayrollAppArgs['obj']['addEmployee()void'] | PayrollAppArgs['tuple']['addEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    addEmployee: (params: CallParams<PayrollAppArgs['obj']['addEmployee(string,string)void'] | PayrollAppArgs['tuple']['addEmployee(string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.params.call(PayrollAppParamsFactory.addEmployee(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `removeEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `removeEmployee(string)void` ABI method.
      *
      * Remove employee from payroll
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    removeEmployee: (params: CallParams<PayrollAppArgs['obj']['removeEmployee()void'] | PayrollAppArgs['tuple']['removeEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    removeEmployee: (params: CallParams<PayrollAppArgs['obj']['removeEmployee(string)void'] | PayrollAppArgs['tuple']['removeEmployee(string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.params.call(PayrollAppParamsFactory.removeEmployee(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `fundApp()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `fundApp(string)void` ABI method.
      *
-     * Fund the application
+     * Fund the application with ALGO or ASA
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    fundApp: (params: CallParams<PayrollAppArgs['obj']['fundApp()void'] | PayrollAppArgs['tuple']['fundApp()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    fundApp: (params: CallParams<PayrollAppArgs['obj']['fundApp(string)void'] | PayrollAppArgs['tuple']['fundApp(string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.params.call(PayrollAppParamsFactory.fundApp(params))
     },
 
@@ -651,26 +699,26 @@ export class PayrollAppClient {
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `pauseEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `pauseEmployee(string,string)void` ABI method.
      *
      * Pause or unpause an employee
      *
      * @param params The params for the smart contract call
      * @returns The call params
      */
-    pauseEmployee: (params: CallParams<PayrollAppArgs['obj']['pauseEmployee()void'] | PayrollAppArgs['tuple']['pauseEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    pauseEmployee: (params: CallParams<PayrollAppArgs['obj']['pauseEmployee(string,string)void'] | PayrollAppArgs['tuple']['pauseEmployee(string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.params.call(PayrollAppParamsFactory.pauseEmployee(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo(string)string` ABI method.
      *
-     * Get employee information
+     * Get employee information from Box Storage
      *
      * @param params The params for the smart contract call
-     * @returns The call params
+     * @returns The call params: Employee info as "name,salary,paused" string
      */
-    getEmployeeInfo: (params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo()void'] | PayrollAppArgs['tuple']['getEmployeeInfo()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    getEmployeeInfo: (params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo(string)string'] | PayrollAppArgs['tuple']['getEmployeeInfo(string)string']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.params.call(PayrollAppParamsFactory.getEmployeeInfo(params))
     },
 
@@ -715,50 +763,50 @@ export class PayrollAppClient {
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `createPayroll()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `createPayroll(string,string,string)void` ABI method.
      *
-     * Create payroll system
+     * Create payroll system (initialize after deployment)
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    createPayroll: (params: CallParams<PayrollAppArgs['obj']['createPayroll()void'] | PayrollAppArgs['tuple']['createPayroll()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    createPayroll: (params: CallParams<PayrollAppArgs['obj']['createPayroll(string,string,string)void'] | PayrollAppArgs['tuple']['createPayroll(string,string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.createTransaction.call(PayrollAppParamsFactory.createPayroll(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `addEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `addEmployee(string,string)void` ABI method.
      *
      * Add employee to payroll
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    addEmployee: (params: CallParams<PayrollAppArgs['obj']['addEmployee()void'] | PayrollAppArgs['tuple']['addEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    addEmployee: (params: CallParams<PayrollAppArgs['obj']['addEmployee(string,string)void'] | PayrollAppArgs['tuple']['addEmployee(string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.createTransaction.call(PayrollAppParamsFactory.addEmployee(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `removeEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `removeEmployee(string)void` ABI method.
      *
      * Remove employee from payroll
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    removeEmployee: (params: CallParams<PayrollAppArgs['obj']['removeEmployee()void'] | PayrollAppArgs['tuple']['removeEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    removeEmployee: (params: CallParams<PayrollAppArgs['obj']['removeEmployee(string)void'] | PayrollAppArgs['tuple']['removeEmployee(string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.createTransaction.call(PayrollAppParamsFactory.removeEmployee(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `fundApp()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `fundApp(string)void` ABI method.
      *
-     * Fund the application
+     * Fund the application with ALGO or ASA
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    fundApp: (params: CallParams<PayrollAppArgs['obj']['fundApp()void'] | PayrollAppArgs['tuple']['fundApp()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    fundApp: (params: CallParams<PayrollAppArgs['obj']['fundApp(string)void'] | PayrollAppArgs['tuple']['fundApp(string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.createTransaction.call(PayrollAppParamsFactory.fundApp(params))
     },
 
@@ -775,26 +823,26 @@ export class PayrollAppClient {
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `pauseEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `pauseEmployee(string,string)void` ABI method.
      *
      * Pause or unpause an employee
      *
      * @param params The params for the smart contract call
      * @returns The call transaction
      */
-    pauseEmployee: (params: CallParams<PayrollAppArgs['obj']['pauseEmployee()void'] | PayrollAppArgs['tuple']['pauseEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    pauseEmployee: (params: CallParams<PayrollAppArgs['obj']['pauseEmployee(string,string)void'] | PayrollAppArgs['tuple']['pauseEmployee(string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.createTransaction.call(PayrollAppParamsFactory.pauseEmployee(params))
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo(string)string` ABI method.
      *
-     * Get employee information
+     * Get employee information from Box Storage
      *
      * @param params The params for the smart contract call
-     * @returns The call transaction
+     * @returns The call transaction: Employee info as "name,salary,paused" string
      */
-    getEmployeeInfo: (params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo()void'] | PayrollAppArgs['tuple']['getEmployeeInfo()void']> & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    getEmployeeInfo: (params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo(string)string'] | PayrollAppArgs['tuple']['getEmployeeInfo(string)string']> & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       return this.appClient.createTransaction.call(PayrollAppParamsFactory.getEmployeeInfo(params))
     },
 
@@ -839,55 +887,55 @@ export class PayrollAppClient {
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `createPayroll()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `createPayroll(string,string,string)void` ABI method.
      *
-     * Create payroll system
+     * Create payroll system (initialize after deployment)
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    createPayroll: async (params: CallParams<PayrollAppArgs['obj']['createPayroll()void'] | PayrollAppArgs['tuple']['createPayroll()void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    createPayroll: async (params: CallParams<PayrollAppArgs['obj']['createPayroll(string,string,string)void'] | PayrollAppArgs['tuple']['createPayroll(string,string,string)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       const result = await this.appClient.send.call(PayrollAppParamsFactory.createPayroll(params))
-      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['createPayroll()void'])}
+      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['createPayroll(string,string,string)void'])}
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `addEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `addEmployee(string,string)void` ABI method.
      *
      * Add employee to payroll
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    addEmployee: async (params: CallParams<PayrollAppArgs['obj']['addEmployee()void'] | PayrollAppArgs['tuple']['addEmployee()void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    addEmployee: async (params: CallParams<PayrollAppArgs['obj']['addEmployee(string,string)void'] | PayrollAppArgs['tuple']['addEmployee(string,string)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       const result = await this.appClient.send.call(PayrollAppParamsFactory.addEmployee(params))
-      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['addEmployee()void'])}
+      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['addEmployee(string,string)void'])}
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `removeEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `removeEmployee(string)void` ABI method.
      *
      * Remove employee from payroll
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    removeEmployee: async (params: CallParams<PayrollAppArgs['obj']['removeEmployee()void'] | PayrollAppArgs['tuple']['removeEmployee()void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    removeEmployee: async (params: CallParams<PayrollAppArgs['obj']['removeEmployee(string)void'] | PayrollAppArgs['tuple']['removeEmployee(string)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       const result = await this.appClient.send.call(PayrollAppParamsFactory.removeEmployee(params))
-      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['removeEmployee()void'])}
+      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['removeEmployee(string)void'])}
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `fundApp()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `fundApp(string)void` ABI method.
      *
-     * Fund the application
+     * Fund the application with ALGO or ASA
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    fundApp: async (params: CallParams<PayrollAppArgs['obj']['fundApp()void'] | PayrollAppArgs['tuple']['fundApp()void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    fundApp: async (params: CallParams<PayrollAppArgs['obj']['fundApp(string)void'] | PayrollAppArgs['tuple']['fundApp(string)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       const result = await this.appClient.send.call(PayrollAppParamsFactory.fundApp(params))
-      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['fundApp()void'])}
+      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['fundApp(string)void'])}
     },
 
     /**
@@ -904,29 +952,29 @@ export class PayrollAppClient {
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `pauseEmployee()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `pauseEmployee(string,string)void` ABI method.
      *
      * Pause or unpause an employee
      *
      * @param params The params for the smart contract call
      * @returns The call result
      */
-    pauseEmployee: async (params: CallParams<PayrollAppArgs['obj']['pauseEmployee()void'] | PayrollAppArgs['tuple']['pauseEmployee()void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    pauseEmployee: async (params: CallParams<PayrollAppArgs['obj']['pauseEmployee(string,string)void'] | PayrollAppArgs['tuple']['pauseEmployee(string,string)void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       const result = await this.appClient.send.call(PayrollAppParamsFactory.pauseEmployee(params))
-      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['pauseEmployee()void'])}
+      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['pauseEmployee(string,string)void'])}
     },
 
     /**
-     * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo()void` ABI method.
+     * Makes a call to the PayrollApp smart contract using the `getEmployeeInfo(string)string` ABI method.
      *
-     * Get employee information
+     * Get employee information from Box Storage
      *
      * @param params The params for the smart contract call
-     * @returns The call result
+     * @returns The call result: Employee info as "name,salary,paused" string
      */
-    getEmployeeInfo: async (params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo()void'] | PayrollAppArgs['tuple']['getEmployeeInfo()void']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC} = {args: []}) => {
+    getEmployeeInfo: async (params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo(string)string'] | PayrollAppArgs['tuple']['getEmployeeInfo(string)string']> & SendParams & {onComplete?: OnApplicationComplete.NoOpOC}) => {
       const result = await this.appClient.send.call(PayrollAppParamsFactory.getEmployeeInfo(params))
-      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['getEmployeeInfo()void'])}
+      return {...result, return: result.return as unknown as (undefined | PayrollAppReturns['getEmployeeInfo(string)string'])}
     },
 
     /**
@@ -980,33 +1028,33 @@ export class PayrollAppClient {
     const resultMappers: Array<undefined | ((x: ABIReturn | undefined) => any)> = []
     return {
       /**
-       * Add a createPayroll()void method call against the PayrollApp contract
+       * Add a createPayroll(string,string,string)void method call against the PayrollApp contract
        */
-      createPayroll(params: CallParams<PayrollAppArgs['obj']['createPayroll()void'] | PayrollAppArgs['tuple']['createPayroll()void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
+      createPayroll(params: CallParams<PayrollAppArgs['obj']['createPayroll(string,string,string)void'] | PayrollAppArgs['tuple']['createPayroll(string,string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
         promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.createPayroll(params)))
         resultMappers.push(undefined)
         return this
       },
       /**
-       * Add a addEmployee()void method call against the PayrollApp contract
+       * Add a addEmployee(string,string)void method call against the PayrollApp contract
        */
-      addEmployee(params: CallParams<PayrollAppArgs['obj']['addEmployee()void'] | PayrollAppArgs['tuple']['addEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
+      addEmployee(params: CallParams<PayrollAppArgs['obj']['addEmployee(string,string)void'] | PayrollAppArgs['tuple']['addEmployee(string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
         promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.addEmployee(params)))
         resultMappers.push(undefined)
         return this
       },
       /**
-       * Add a removeEmployee()void method call against the PayrollApp contract
+       * Add a removeEmployee(string)void method call against the PayrollApp contract
        */
-      removeEmployee(params: CallParams<PayrollAppArgs['obj']['removeEmployee()void'] | PayrollAppArgs['tuple']['removeEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
+      removeEmployee(params: CallParams<PayrollAppArgs['obj']['removeEmployee(string)void'] | PayrollAppArgs['tuple']['removeEmployee(string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
         promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.removeEmployee(params)))
         resultMappers.push(undefined)
         return this
       },
       /**
-       * Add a fundApp()void method call against the PayrollApp contract
+       * Add a fundApp(string)void method call against the PayrollApp contract
        */
-      fundApp(params: CallParams<PayrollAppArgs['obj']['fundApp()void'] | PayrollAppArgs['tuple']['fundApp()void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
+      fundApp(params: CallParams<PayrollAppArgs['obj']['fundApp(string)void'] | PayrollAppArgs['tuple']['fundApp(string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
         promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.fundApp(params)))
         resultMappers.push(undefined)
         return this
@@ -1020,19 +1068,19 @@ export class PayrollAppClient {
         return this
       },
       /**
-       * Add a pauseEmployee()void method call against the PayrollApp contract
+       * Add a pauseEmployee(string,string)void method call against the PayrollApp contract
        */
-      pauseEmployee(params: CallParams<PayrollAppArgs['obj']['pauseEmployee()void'] | PayrollAppArgs['tuple']['pauseEmployee()void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
+      pauseEmployee(params: CallParams<PayrollAppArgs['obj']['pauseEmployee(string,string)void'] | PayrollAppArgs['tuple']['pauseEmployee(string,string)void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
         promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.pauseEmployee(params)))
         resultMappers.push(undefined)
         return this
       },
       /**
-       * Add a getEmployeeInfo()void method call against the PayrollApp contract
+       * Add a getEmployeeInfo(string)string method call against the PayrollApp contract
        */
-      getEmployeeInfo(params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo()void'] | PayrollAppArgs['tuple']['getEmployeeInfo()void']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
+      getEmployeeInfo(params: CallParams<PayrollAppArgs['obj']['getEmployeeInfo(string)string'] | PayrollAppArgs['tuple']['getEmployeeInfo(string)string']> & {onComplete?: OnApplicationComplete.NoOpOC}) {
         promiseChain = promiseChain.then(async () => composer.addAppCallMethodCall(await client.params.getEmployeeInfo(params)))
-        resultMappers.push(undefined)
+        resultMappers.push((v) => client.decodeReturnValue('getEmployeeInfo(string)string', v))
         return this
       },
       /**
@@ -1087,18 +1135,18 @@ export class PayrollAppClient {
 }
 export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
-   * Calls the createPayroll()void ABI method.
+   * Calls the createPayroll(string,string,string)void ABI method.
    *
-   * Create payroll system
+   * Create payroll system (initialize after deployment)
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  createPayroll(params?: CallParams<PayrollAppArgs['obj']['createPayroll()void'] | PayrollAppArgs['tuple']['createPayroll()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['createPayroll()void'] | undefined]>
+  createPayroll(params?: CallParams<PayrollAppArgs['obj']['createPayroll(string,string,string)void'] | PayrollAppArgs['tuple']['createPayroll(string,string,string)void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['createPayroll(string,string,string)void'] | undefined]>
 
   /**
-   * Calls the addEmployee()void ABI method.
+   * Calls the addEmployee(string,string)void ABI method.
    *
    * Add employee to payroll
    *
@@ -1106,10 +1154,10 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  addEmployee(params?: CallParams<PayrollAppArgs['obj']['addEmployee()void'] | PayrollAppArgs['tuple']['addEmployee()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['addEmployee()void'] | undefined]>
+  addEmployee(params?: CallParams<PayrollAppArgs['obj']['addEmployee(string,string)void'] | PayrollAppArgs['tuple']['addEmployee(string,string)void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['addEmployee(string,string)void'] | undefined]>
 
   /**
-   * Calls the removeEmployee()void ABI method.
+   * Calls the removeEmployee(string)void ABI method.
    *
    * Remove employee from payroll
    *
@@ -1117,18 +1165,18 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  removeEmployee(params?: CallParams<PayrollAppArgs['obj']['removeEmployee()void'] | PayrollAppArgs['tuple']['removeEmployee()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['removeEmployee()void'] | undefined]>
+  removeEmployee(params?: CallParams<PayrollAppArgs['obj']['removeEmployee(string)void'] | PayrollAppArgs['tuple']['removeEmployee(string)void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['removeEmployee(string)void'] | undefined]>
 
   /**
-   * Calls the fundApp()void ABI method.
+   * Calls the fundApp(string)void ABI method.
    *
-   * Fund the application
+   * Fund the application with ALGO or ASA
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  fundApp(params?: CallParams<PayrollAppArgs['obj']['fundApp()void'] | PayrollAppArgs['tuple']['fundApp()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['fundApp()void'] | undefined]>
+  fundApp(params?: CallParams<PayrollAppArgs['obj']['fundApp(string)void'] | PayrollAppArgs['tuple']['fundApp(string)void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['fundApp(string)void'] | undefined]>
 
   /**
    * Calls the disburse()void ABI method.
@@ -1142,7 +1190,7 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   disburse(params?: CallParams<PayrollAppArgs['obj']['disburse()void'] | PayrollAppArgs['tuple']['disburse()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['disburse()void'] | undefined]>
 
   /**
-   * Calls the pauseEmployee()void ABI method.
+   * Calls the pauseEmployee(string,string)void ABI method.
    *
    * Pause or unpause an employee
    *
@@ -1150,18 +1198,18 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  pauseEmployee(params?: CallParams<PayrollAppArgs['obj']['pauseEmployee()void'] | PayrollAppArgs['tuple']['pauseEmployee()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['pauseEmployee()void'] | undefined]>
+  pauseEmployee(params?: CallParams<PayrollAppArgs['obj']['pauseEmployee(string,string)void'] | PayrollAppArgs['tuple']['pauseEmployee(string,string)void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['pauseEmployee(string,string)void'] | undefined]>
 
   /**
-   * Calls the getEmployeeInfo()void ABI method.
+   * Calls the getEmployeeInfo(string)string ABI method.
    *
-   * Get employee information
+   * Get employee information from Box Storage
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  getEmployeeInfo(params?: CallParams<PayrollAppArgs['obj']['getEmployeeInfo()void'] | PayrollAppArgs['tuple']['getEmployeeInfo()void']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['getEmployeeInfo()void'] | undefined]>
+  getEmployeeInfo(params?: CallParams<PayrollAppArgs['obj']['getEmployeeInfo(string)string'] | PayrollAppArgs['tuple']['getEmployeeInfo(string)string']>): PayrollAppComposer<[...TReturns, PayrollAppReturns['getEmployeeInfo(string)string'] | undefined]>
 
   /**
    * Calls the getPayrollInfo()void ABI method.
@@ -1207,9 +1255,9 @@ export type PayrollAppComposer<TReturns extends [...any[]] = []> = {
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(): Promise<PayrollAppComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
-  simulate(options: SkipSignaturesSimulateOptions): Promise<PayrollAppComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
-  simulate(options: RawSimulateOptions): Promise<PayrollAppComposerResults<TReturns> & { simulateResponse: SimulateResponse }>
+  simulate(): Promise<PayrollAppComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>
+  simulate(options: SkipSignaturesSimulateOptions): Promise<PayrollAppComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>
+  simulate(options: RawSimulateOptions): Promise<PayrollAppComposerResults<TReturns> & { simulateResponse: modelsv2.SimulateResponse }>
   /**
    * Sends the transaction group to the network and returns the results
    */

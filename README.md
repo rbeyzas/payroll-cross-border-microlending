@@ -1,14 +1,51 @@
-# Algorand-dApp-Quick-Start-Template-TypeScript
+# Payroll + Cross-Border Microlending (AI destekli)
 
-This is a full-stack starter template for quickly building and testing Web3 ideas on Algorand. It includes:
+Bu proje, Algorand üzerinde iki temel finansal işlevi bir araya getiriyor:
 
-- Wallet connection
-- Send ALGO payments
-- NFT minting (IPFS metadata via Pinata)
-- Token (ASA) creation
-- Smart contract interaction demo
+## 🔹 PayrollApp (MVP) - Aktif
 
-Use this template to kickstart your project, prototype ideas, and showcase a working proof-of-concept.
+**Smart Contract AppID:** `746228510`  
+**AlgoExplorer:** [https://testnet.algoexplorer.io/application/746228510](https://testnet.algoexplorer.io/application/746228510)
+
+### Özellikler:
+
+- ✅ **Payroll Oluşturma:** İşveren kontrat üzerinden çalışanlarını ekleyip maaşlarını tanımlar
+- ✅ **Employee Management:** AlgoKit Box Storage ile çalışan verilerini saklar
+- ✅ **Otomatik Ödeme:** "Disburse" fonksiyonu ile tüm çalışanlara otomatik maaş dağıtımı
+- ✅ **4-Step Wizard:** Payroll oluştur → Çalışan ekle → Fonla → Dağıt
+
+### Smart Contract Fonksiyonları:
+
+- `createPayroll(asaId, cycleSecs, adminAddress)` - Payroll sistemi başlat
+- `addEmployee(employeeAddress, amount)` - Çalışan ekle
+- `removeEmployee(employeeAddress)` - Çalışan çıkar
+- `fundApp(amount)` - Kontrata fon gönder
+- `disburse()` - Maaşları dağıt
+- `pauseEmployee(employeeAddress, paused)` - Çalışanı duraklat/devam ettir
+
+### Frontend Wizard:
+
+1. **Step 1:** Payroll oluştur (ASA ID, cycle seconds, admin)
+2. **Step 2:** Çalışan ekle (address, amount)
+3. **Step 3:** Fonla (app hesabına ALGO/ASA gönder)
+4. **Step 4:** Dağıtım (disburse butonu - gerçek ödeme yapar!)
+
+## 🔹 Cross-Border Microlending (Gelecek)
+
+- Küçük kredi talepleri (örn. 20 ALGO)
+- Otomatik kredi onaylama ve gönderimi
+- Taksitli geri ödeme sistemi
+- AI destekli risk değerlendirmesi
+
+## 🔹 AI Katmanı
+
+- **Payroll:** CSV dosyasından otomatik parametre hazırlama
+- **Microlending:** Cüzdan geçmişine dayalı risk skoru
+- **Analytics:** Kullanım verilerini ölçme ve raporlama
+
+---
+
+Bu proje, Algorand üzerinde çalışan bir bordro ve mikro kredi platformu. Şirketler çalışanlarına blockchain üzerinden maaş ödeyebilir, bireyler küçük krediler alıp geri ödeyebilir.
 
 ## 🌟 How To Get Started Instructions
 

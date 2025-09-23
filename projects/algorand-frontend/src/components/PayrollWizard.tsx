@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { PayrollAppClient } from '../contracts/PayrollApp'
-import { AlgorandClient } from '@algorandfoundation/algokit-utils'
+import { AlgorandClient, algo } from '@algorandfoundation/algokit-utils'
 import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
 interface Employee {
@@ -70,12 +70,16 @@ const PayrollWizard: React.FC = () => {
       const payrollClient = new PayrollAppClient({
         algorand,
         defaultSender: activeAddress!,
-        appId: BigInt(746195399), // Real deployed AppID
+        appId: BigInt(746228510), // New deployed AppID
       })
 
       // Call createPayroll method
       const result = await payrollClient.send.createPayroll({
-        args: [],
+        args: [
+          payrollData.asaId.toString(), // ASA ID (0 for ALGO)
+          payrollData.cycleSecs.toString(), // Cycle seconds
+          activeAddress, // Admin address
+        ],
         sender: activeAddress!,
       })
 
@@ -114,12 +118,12 @@ const PayrollWizard: React.FC = () => {
       const payrollClient = new PayrollAppClient({
         algorand,
         defaultSender: activeAddress!,
-        appId: BigInt(746195399), // Real deployed AppID
+        appId: BigInt(746228510), // New deployed AppID
       })
 
       // Call fundApp method
       const result = await payrollClient.send.fundApp({
-        args: [],
+        args: [payrollData.totalFunded.toString()],
         sender: activeAddress!,
       })
 
@@ -136,6 +140,11 @@ const PayrollWizard: React.FC = () => {
   }
 
   const handleDisburse = async () => {
+    if (!activeAddress || !transactionSigner) {
+      setError('Please connect your wallet first')
+      return
+    }
+
     setLoading(true)
     setError('')
 
@@ -153,10 +162,36 @@ const PayrollWizard: React.FC = () => {
       const payrollClient = new PayrollAppClient({
         algorand,
         defaultSender: activeAddress!,
-        appId: BigInt(746195399), // Real deployed AppID
+        appId: BigInt(746228510), // New deployed AppID
       })
 
-      // Call disburse method
+      // Send individual payments to each employee
+      for (const employee of payrollData.employees) {
+        if (employee.paused) {
+          console.log(`Skipping paused employee: ${employee.address}`)
+          continue
+        }
+
+        try {
+          // Send payment to each employee
+          const paymentResult = await algorand.send.payment({
+            signer: transactionSigner,
+            sender: activeAddress,
+            receiver: employee.address,
+            amount: algo(Number(employee.amount) / 1000000), // Convert microALGO to ALGO
+          })
+
+          console.log(`Payment sent to ${employee.address}:`, paymentResult.txIds[0])
+
+          // Small delay between payments
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+        } catch (paymentError) {
+          console.error(`Failed to send payment to ${employee.address}:`, paymentError)
+          // Continue with other employees even if one fails
+        }
+      }
+
+      // Call disburse method to update contract state
       const result = await payrollClient.send.disburse({
         args: [],
         sender: activeAddress!,
@@ -165,7 +200,7 @@ const PayrollWizard: React.FC = () => {
       console.log('Disbursement result:', result)
       console.log('Payments disbursed successfully!')
 
-      alert('Payments disbursed successfully!')
+      alert('Payments disbursed successfully to all employees!')
     } catch (err) {
       setError('Failed to disburse payments')
       console.error(err)
