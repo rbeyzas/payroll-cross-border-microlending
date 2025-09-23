@@ -166,30 +166,49 @@ const PayrollWizard: React.FC = () => {
       })
 
       // Send individual payments to each employee
-      for (const employee of payrollData.employees) {
+      console.log(`Starting to send payments to ${payrollData.employees.length} employees`)
+
+      for (let i = 0; i < payrollData.employees.length; i++) {
+        const employee = payrollData.employees[i]
+
         if (employee.paused) {
-          console.log(`Skipping paused employee: ${employee.address}`)
+          console.log(`Skipping paused employee ${i + 1}: ${employee.address}`)
           continue
         }
 
+        console.log(`Processing employee ${i + 1}/${payrollData.employees.length}: ${employee.address}`)
+        console.log(`Amount to send: ${employee.amount} microALGO (${Number(employee.amount) / 1000000} ALGO)`)
+
         try {
+          // Calculate total amount including minimum balance requirement
+          // Algorand minimum balance is 100,000 microALGO (0.1 ALGO)
+          const minBalance = 100000 // 0.1 ALGO in microALGO
+          const totalAmount = Number(employee.amount) + minBalance
+
+          console.log(`Total amount with min balance: ${totalAmount} microALGO (${totalAmount / 1000000} ALGO)`)
+
           // Send payment to each employee
           const paymentResult = await algorand.send.payment({
             signer: transactionSigner,
             sender: activeAddress,
             receiver: employee.address,
-            amount: algo(Number(employee.amount) / 1000000), // Convert microALGO to ALGO
+            amount: algo(totalAmount / 1000000), // Convert microALGO to ALGO
           })
 
-          console.log(`Payment sent to ${employee.address}:`, paymentResult.txIds[0])
+          console.log(`✅ Payment sent to ${employee.address}:`, paymentResult.txIds[0])
+          console.log(`Remaining employees: ${payrollData.employees.length - i - 1}`)
 
           // Small delay between payments
-          await new Promise((resolve) => setTimeout(resolve, 1000))
+          console.log(`Waiting 2 seconds before next payment...`)
+          await new Promise((resolve) => setTimeout(resolve, 2000))
         } catch (paymentError) {
-          console.error(`Failed to send payment to ${employee.address}:`, paymentError)
+          console.error(`❌ Failed to send payment to ${employee.address}:`, paymentError)
+          console.error(`Error details:`, paymentError.message || paymentError)
           // Continue with other employees even if one fails
         }
       }
+
+      console.log(`Finished processing all ${payrollData.employees.length} employees`)
 
       // Call disburse method to update contract state
       const result = await payrollClient.send.disburse({
