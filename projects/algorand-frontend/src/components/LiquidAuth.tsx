@@ -133,9 +133,11 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
 
       // Create user data from WebAuthn credential
       const credentialId = credential.id
-      const publicKey = Array.from(new Uint8Array(credential.rawId)).map(b => b.toString(16).padStart(2, '0')).join('')
+      const publicKey = Array.from(new Uint8Array(credential.rawId))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
       const did = `did:algo:testnet:${publicKey.slice(0, 32)}`
-      
+
       const userData: User = {
         did,
         address: publicKey.slice(0, 32),
@@ -214,9 +216,11 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
 
       // Create user data from WebAuthn credential
       const credentialId = credential.id
-      const publicKey = Array.from(new Uint8Array(credential.rawId)).map(b => b.toString(16).padStart(2, '0')).join('')
+      const publicKey = Array.from(new Uint8Array(credential.rawId))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
       const did = `did:algo:testnet:${publicKey.slice(0, 32)}`
-      
+
       const userData: User = {
         did,
         address: publicKey.slice(0, 32),
@@ -385,8 +389,8 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
         <p className="text-gray-600">Choose your preferred login method</p>
         <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-700">
-            <strong>Liquid Auth Integration:</strong> This component uses direct WebAuthn implementation 
-            for demonstration purposes. In production, it would integrate with Liquid Auth API.
+            <strong>Liquid Auth Integration:</strong> This component uses direct WebAuthn implementation for demonstration purposes. In
+            production, it would integrate with Liquid Auth API.
           </p>
         </div>
       </div>

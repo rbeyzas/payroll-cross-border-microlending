@@ -44,7 +44,7 @@ const PayrollWizard: React.FC = () => {
         console.error('Error loading Liquid Auth user:', error)
       }
     }
-    
+
     // Check if user is authenticated via wallet
     if (activeAddress) {
       setIsAuthenticated(true)
@@ -291,18 +291,16 @@ const PayrollWizard: React.FC = () => {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Authentication Required</h2>
-          <p className="text-gray-600 mb-6">
-            Please connect your wallet or login with Liquid Auth to create a payroll system.
-          </p>
+          <p className="text-gray-600 mb-6">Please connect your wallet or login with Liquid Auth to create a payroll system.</p>
           <div className="space-y-3">
-            <a 
-              href="/connect-wallet" 
+            <a
+              href="/connect-wallet"
               className="block bg-gradient-to-r from-blue-600 to-teal-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-teal-700 transition-all duration-200"
             >
               Connect Wallet
             </a>
-            <a 
-              href="/liquid-auth" 
+            <a
+              href="/liquid-auth"
               className="block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
             >
               Login with Liquid Auth

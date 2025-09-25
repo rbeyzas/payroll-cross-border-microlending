@@ -173,9 +173,7 @@ const Navbar: React.FC = () => {
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="text-sm">
                   <span className="text-blue-600 font-medium">Liquid Auth:</span>
-                  <span className="ml-1 font-mono text-xs text-blue-800">
-                    {liquidAuthUser.did.slice(0, 20)}...
-                  </span>
+                  <span className="ml-1 font-mono text-xs text-blue-800">{liquidAuthUser.did.slice(0, 20)}...</span>
                 </div>
               </div>
             ) : null}

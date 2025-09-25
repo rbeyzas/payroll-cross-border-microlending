@@ -43,7 +43,7 @@ export default function MicroloanWizard() {
         console.error('Error loading Liquid Auth user:', error)
       }
     }
-    
+
     // Check if user is authenticated via wallet
     if (activeAddress) {
       setIsAuthenticated(true)
