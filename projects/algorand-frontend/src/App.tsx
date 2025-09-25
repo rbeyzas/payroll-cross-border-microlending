@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage'
 import ConnectWalletPage from './pages/ConnectWalletPage'
 import PayrollPage from './pages/PayrollPage'
 import MicroloanPage from './pages/MicroloanPage'
+import LiquidAuthPage from './pages/LiquidAuthPage'
 import Home from './Home'
 import { getAlgodConfigFromViteEnvironment, getKmdConfigFromViteEnvironment } from './utils/network/getAlgoClientConfigs'
 
@@ -70,6 +71,7 @@ export default function App() {
               <Route path="/dashboard" element={<Home />} />
               <Route path="/payroll" element={<PayrollPage />} />
               <Route path="/microlending" element={<MicroloanPage />} />
+              <Route path="/liquid-auth" element={<LiquidAuthPage />} />
               <Route path="/analytics" element={<Home />} />
             </Routes>
           </div>

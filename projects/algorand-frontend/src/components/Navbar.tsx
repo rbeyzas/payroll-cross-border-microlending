@@ -99,6 +99,14 @@ const Navbar: React.FC = () => {
             >
               Analytics
             </Link>
+            <Link
+              to="/liquid-auth"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                location.pathname === '/liquid-auth' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
+              Liquid Auth
+            </Link>
           </div>
 
           {/* Connect Wallet Button & Balance */}
