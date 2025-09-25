@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { PayrollAppClient } from '../contracts/PayrollApp'
 import { AlgorandClient, algo } from '@algorandfoundation/algokit-utils'
@@ -28,6 +28,28 @@ const PayrollWizard: React.FC = () => {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [liquidAuthUser, setLiquidAuthUser] = useState<any>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  // Check authentication status
+  useEffect(() => {
+    // Check if user is authenticated via Liquid Auth
+    const savedUser = localStorage.getItem('liquidAuthUser')
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser)
+        setLiquidAuthUser(userData)
+        setIsAuthenticated(true)
+      } catch (error) {
+        console.error('Error loading Liquid Auth user:', error)
+      }
+    }
+    
+    // Check if user is authenticated via wallet
+    if (activeAddress) {
+      setIsAuthenticated(true)
+    }
+  }, [activeAddress])
 
   const steps = [
     { number: 1, title: 'Create Payroll', description: 'Set up your payroll contract' },
@@ -254,7 +276,7 @@ const PayrollWizard: React.FC = () => {
     }))
   }
 
-  if (!activeAddress) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
@@ -268,11 +290,24 @@ const PayrollWizard: React.FC = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Wallet Required</h2>
-          <p className="text-gray-600 mb-6">Please connect your wallet to create a payroll system.</p>
-          <button className="bg-gradient-to-r from-blue-600 to-teal-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-teal-700 transition-all duration-200">
-            Connect Wallet
-          </button>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Authentication Required</h2>
+          <p className="text-gray-600 mb-6">
+            Please connect your wallet or login with Liquid Auth to create a payroll system.
+          </p>
+          <div className="space-y-3">
+            <a 
+              href="/connect-wallet" 
+              className="block bg-gradient-to-r from-blue-600 to-teal-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-teal-700 transition-all duration-200"
+            >
+              Connect Wallet
+            </a>
+            <a 
+              href="/liquid-auth" 
+              className="block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+            >
+              Login with Liquid Auth
+            </a>
+          </div>
         </div>
       </div>
     )

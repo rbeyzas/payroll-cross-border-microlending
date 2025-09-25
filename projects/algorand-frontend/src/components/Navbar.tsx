@@ -4,11 +4,52 @@ import { useWallet } from '@txnlab/use-wallet-react'
 import { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
+interface LiquidAuthUser {
+  did: string
+  address: string
+  publicKey?: string
+  controller?: string
+}
+
 const Navbar: React.FC = () => {
   const { activeAddress } = useWallet()
   const location = useLocation()
   const [balance, setBalance] = useState<number>(0)
   const [loadingBalance, setLoadingBalance] = useState(false)
+  const [liquidAuthUser, setLiquidAuthUser] = useState<LiquidAuthUser | null>(null)
+
+  // Load Liquid Auth user from localStorage
+  useEffect(() => {
+    const savedUser = localStorage.getItem('liquidAuthUser')
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser)
+        setLiquidAuthUser(userData)
+      } catch (error) {
+        // Error loading Liquid Auth user
+        localStorage.removeItem('liquidAuthUser')
+      }
+    }
+
+    // Listen for storage changes (when user logs in/out in another tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'liquidAuthUser') {
+        if (e.newValue) {
+          try {
+            const userData = JSON.parse(e.newValue)
+            setLiquidAuthUser(userData)
+          } catch (error) {
+            // Error parsing Liquid Auth user data
+          }
+        } else {
+          setLiquidAuthUser(null)
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
 
   // Fetch account balance
   useEffect(() => {
@@ -24,18 +65,10 @@ const Navbar: React.FC = () => {
         const algodConfig = getAlgodConfigFromViteEnvironment()
         const algorand = AlgorandClient.fromConfig({ algodConfig })
 
-        console.log('Fetching balance for address:', activeAddress)
-        console.log('Algorand client config:', algodConfig)
-
         const accountInfo = await algorand.account.getInformation(activeAddress)
-        console.log('Account info:', accountInfo)
-        console.log('Raw amount:', accountInfo.amount)
-        console.log('Network:', algodConfig.server)
-        console.log('Address on testnet explorer:', `https://testnet.algoexplorer.io/address/${activeAddress}`)
-
         setBalance(Number(accountInfo.amount))
       } catch (error) {
-        console.error('Error fetching balance:', error)
+        // Error fetching balance
         setBalance(0)
       } finally {
         setLoadingBalance(false)
@@ -132,14 +165,29 @@ const Navbar: React.FC = () => {
                   </span>
                 </div>
               </div>
-            ) : (
+            ) : null}
+
+            {/* Liquid Auth User Display */}
+            {liquidAuthUser ? (
+              <div className="flex items-center space-x-2 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="text-sm">
+                  <span className="text-blue-600 font-medium">Liquid Auth:</span>
+                  <span className="ml-1 font-mono text-xs text-blue-800">
+                    {liquidAuthUser.did.slice(0, 20)}...
+                  </span>
+                </div>
+              </div>
+            ) : null}
+
+            {!activeAddress && !liquidAuthUser ? (
               <Link
                 to="/connect-wallet"
                 className="bg-gradient-to-r from-blue-500 to-teal-500 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-600 hover:to-teal-600 transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 Connect Wallet
               </Link>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

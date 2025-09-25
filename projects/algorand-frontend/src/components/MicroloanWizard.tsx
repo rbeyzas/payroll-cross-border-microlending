@@ -27,6 +27,28 @@ export default function MicroloanWizard() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [liquidAuthUser, setLiquidAuthUser] = useState<any>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  // Check authentication status
+  useEffect(() => {
+    // Check if user is authenticated via Liquid Auth
+    const savedUser = localStorage.getItem('liquidAuthUser')
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser)
+        setLiquidAuthUser(userData)
+        setIsAuthenticated(true)
+      } catch (error) {
+        console.error('Error loading Liquid Auth user:', error)
+      }
+    }
+    
+    // Check if user is authenticated via wallet
+    if (activeAddress) {
+      setIsAuthenticated(true)
+    }
+  }, [activeAddress])
 
   // Step 1: Loan Request
   const [loanRequest, setLoanRequest] = useState({
