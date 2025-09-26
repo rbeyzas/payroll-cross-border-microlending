@@ -18,6 +18,9 @@ const Navbar: React.FC = () => {
   const [loadingBalance, setLoadingBalance] = useState(false)
   const [liquidAuthUser, setLiquidAuthUser] = useState<LiquidAuthUser | null>(null)
 
+  // Determine if we're on the home page (dark theme) or other pages (light theme)
+  const isHomePage = location.pathname === '/'
+
   // Load Liquid Auth user from localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem('liquidAuthUser')
@@ -66,7 +69,7 @@ const Navbar: React.FC = () => {
         const algorand = AlgorandClient.fromConfig({ algodConfig })
 
         const accountInfo = await algorand.account.getInformation(activeAddress)
-        setBalance(Number(accountInfo.amount || 0))
+        setBalance(Number(accountInfo.balance || 0))
       } catch (error) {
         // Error fetching balance
         setBalance(0)
@@ -83,16 +86,22 @@ const Navbar: React.FC = () => {
   }, [activeAddress])
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
+    <nav
+      className={`${isHomePage ? 'bg-gray-900/95' : 'bg-white/95'} backdrop-blur-sm shadow-2xl border-b ${isHomePage ? 'border-gray-700' : 'border-gray-200'}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-lg flex items-center justify-center">
+            <Link to="/" className="flex items-center space-x-2 group">
+              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <span className="text-white font-bold text-sm">A</span>
               </div>
-              <span className="text-xl font-bold text-gray-800">PayrollLend</span>
+              <span
+                className={`text-xl font-bold ${isHomePage ? 'text-white group-hover:text-green-400' : 'text-gray-900 group-hover:text-green-600'} transition-colors duration-300`}
+              >
+                Cross-Border Microlending
+              </span>
             </Link>
           </div>
 
@@ -101,7 +110,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/"
               className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600'
+                location.pathname === '/'
+                  ? `${isHomePage ? 'text-blue-400 border-b-2 border-blue-400' : 'text-blue-600 border-b-2 border-blue-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`
               }`}
             >
               Home
@@ -109,7 +120,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/payroll"
               className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/payroll' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600'
+                location.pathname === '/payroll'
+                  ? `${isHomePage ? 'text-blue-400 border-b-2 border-blue-400' : 'text-blue-600 border-b-2 border-blue-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`
               }`}
             >
               Payroll
@@ -118,8 +131,8 @@ const Navbar: React.FC = () => {
               to="/microlending"
               className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === '/microlending'
-                  ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
-                  : 'text-gray-700 hover:text-blue-600'
+                  ? `${isHomePage ? 'text-blue-400 border-b-2 border-blue-400' : 'text-blue-600 border-b-2 border-blue-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`
               }`}
             >
               Microlending
@@ -127,7 +140,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/analytics"
               className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/analytics' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600'
+                location.pathname === '/analytics'
+                  ? `${isHomePage ? 'text-blue-400 border-b-2 border-blue-400' : 'text-blue-600 border-b-2 border-blue-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`
               }`}
             >
               Analytics
@@ -135,7 +150,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/liquid-auth"
               className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/liquid-auth' ? 'text-blue-600 border-b-2 border-blue-600 pb-1' : 'text-gray-700 hover:text-blue-600'
+                location.pathname === '/liquid-auth'
+                  ? `${isHomePage ? 'text-blue-400 border-b-2 border-blue-400' : 'text-blue-600 border-b-2 border-blue-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`
               }`}
             >
               Liquid Auth
@@ -144,8 +161,8 @@ const Navbar: React.FC = () => {
               to="/hackathon-demo"
               className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === '/hackathon-demo'
-                  ? 'text-purple-600 border-b-2 border-purple-600 pb-1'
-                  : 'text-gray-700 hover:text-purple-600'
+                  ? `${isHomePage ? 'text-purple-400 border-b-2 border-purple-400' : 'text-purple-600 border-b-2 border-purple-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-purple-400' : 'text-gray-700 hover:text-purple-600'}`
               }`}
             >
               🏆 Hackathon Demo
@@ -157,20 +174,24 @@ const Navbar: React.FC = () => {
             {activeAddress ? (
               <div className="flex items-center space-x-4">
                 {/* Balance Display */}
-                <div className="flex items-center space-x-2 bg-gray-50 px-3 py-2 rounded-lg">
+                <div className={`flex items-center space-x-2 ${isHomePage ? 'bg-gray-800' : 'bg-gray-50'} px-3 py-2 rounded-lg`}>
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <div className="text-sm">
-                    <span className="text-gray-600 font-medium">Balance:</span>
-                    <span className="ml-1 font-bold text-gray-900">
-                      {loadingBalance ? <span className="text-gray-400">Loading...</span> : `${(balance / 1000000).toFixed(2)} ALGO`}
+                    <span className={`${isHomePage ? 'text-gray-300' : 'text-gray-600'} font-medium`}>Balance:</span>
+                    <span className={`ml-1 font-bold ${isHomePage ? 'text-white' : 'text-gray-900'}`}>
+                      {loadingBalance ? (
+                        <span className={isHomePage ? 'text-gray-400' : 'text-gray-400'}>Loading...</span>
+                      ) : (
+                        `${(balance / 1000000).toFixed(2)} ALGO`
+                      )}
                     </span>
                   </div>
                 </div>
 
                 {/* Address Display */}
-                <div className="text-sm text-gray-600">
+                <div className={`text-sm ${isHomePage ? 'text-gray-300' : 'text-gray-600'}`}>
                   <span className="font-medium">Connected:</span>
-                  <span className="ml-1 font-mono text-xs">
+                  <span className={`ml-1 font-mono text-xs ${isHomePage ? 'text-gray-400' : 'text-gray-500'}`}>
                     {activeAddress.slice(0, 6)}...{activeAddress.slice(-4)}
                   </span>
                 </div>
@@ -179,11 +200,15 @@ const Navbar: React.FC = () => {
 
             {/* Liquid Auth User Display */}
             {liquidAuthUser ? (
-              <div className="flex items-center space-x-2 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+              <div
+                className={`flex items-center space-x-2 ${isHomePage ? 'bg-blue-900/50' : 'bg-blue-50'} px-3 py-2 rounded-lg border ${isHomePage ? 'border-blue-700' : 'border-blue-200'}`}
+              >
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="text-sm">
-                  <span className="text-blue-600 font-medium">Liquid Auth:</span>
-                  <span className="ml-1 font-mono text-xs text-blue-800">{liquidAuthUser.did.slice(0, 20)}...</span>
+                  <span className={`${isHomePage ? 'text-blue-300' : 'text-blue-600'} font-medium`}>Liquid Auth:</span>
+                  <span className={`ml-1 font-mono text-xs ${isHomePage ? 'text-blue-200' : 'text-blue-800'}`}>
+                    {liquidAuthUser.did.slice(0, 20)}...
+                  </span>
                 </div>
               </div>
             ) : null}
@@ -202,11 +227,13 @@ const Navbar: React.FC = () => {
 
       {/* Mobile menu */}
       <div className="md:hidden">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50">
+        <div className={`px-2 pt-2 pb-3 space-y-1 sm:px-3 ${isHomePage ? 'bg-gray-800' : 'bg-gray-50'}`}>
           <Link
             to="/"
             className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+              location.pathname === '/'
+                ? `${isHomePage ? 'text-blue-400 bg-blue-900/50' : 'text-blue-600 bg-blue-50'}`
+                : `${isHomePage ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-700' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'}`
             }`}
           >
             Home
@@ -214,7 +241,9 @@ const Navbar: React.FC = () => {
           <Link
             to="/payroll"
             className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/payroll' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+              location.pathname === '/payroll'
+                ? `${isHomePage ? 'text-blue-400 bg-blue-900/50' : 'text-blue-600 bg-blue-50'}`
+                : `${isHomePage ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-700' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'}`
             }`}
           >
             Payroll
@@ -222,7 +251,9 @@ const Navbar: React.FC = () => {
           <Link
             to="/microlending"
             className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/microlending' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+              location.pathname === '/microlending'
+                ? `${isHomePage ? 'text-blue-400 bg-blue-900/50' : 'text-blue-600 bg-blue-50'}`
+                : `${isHomePage ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-700' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'}`
             }`}
           >
             Microlending
@@ -230,7 +261,9 @@ const Navbar: React.FC = () => {
           <Link
             to="/analytics"
             className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/analytics' ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+              location.pathname === '/analytics'
+                ? `${isHomePage ? 'text-blue-400 bg-blue-900/50' : 'text-blue-600 bg-blue-50'}`
+                : `${isHomePage ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-700' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'}`
             }`}
           >
             Analytics
