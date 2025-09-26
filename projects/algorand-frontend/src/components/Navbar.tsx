@@ -12,14 +12,46 @@ interface LiquidAuthUser {
 }
 
 const Navbar: React.FC = () => {
-  const { activeAddress } = useWallet()
+  const { activeAddress, disconnect } = useWallet()
   const location = useLocation()
   const [balance, setBalance] = useState<number>(0)
   const [loadingBalance, setLoadingBalance] = useState(false)
   const [liquidAuthUser, setLiquidAuthUser] = useState<LiquidAuthUser | null>(null)
+  const [showWalletMenu, setShowWalletMenu] = useState(false)
+  const [showLiquidAuthMenu, setShowLiquidAuthMenu] = useState(false)
 
   // Determine if we're on the home page (dark theme) or other pages (light theme)
   const isHomePage = location.pathname === '/'
+
+  // Handle wallet disconnect
+  const handleWalletDisconnect = async () => {
+    try {
+      await disconnect()
+      setBalance(0)
+    } catch (error) {
+      console.error('Failed to disconnect wallet:', error)
+    }
+  }
+
+  // Handle Liquid Auth logout
+  const handleLiquidAuthLogout = () => {
+    localStorage.removeItem('liquidAuthUser')
+    setLiquidAuthUser(null)
+  }
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (!target.closest('.dropdown-menu')) {
+        setShowWalletMenu(false)
+        setShowLiquidAuthMenu(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   // Load Liquid Auth user from localStorage
   useEffect(() => {
@@ -107,7 +139,7 @@ const Navbar: React.FC = () => {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link
+            {/* <Link
               to="/"
               className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === '/'
@@ -116,7 +148,7 @@ const Navbar: React.FC = () => {
               }`}
             >
               Home
-            </Link>
+            </Link> */}
             <Link
               to="/payroll"
               className={`text-sm font-medium transition-colors duration-200 ${
@@ -137,7 +169,7 @@ const Navbar: React.FC = () => {
             >
               Microlending
             </Link>
-            <Link
+            {/* <Link
               to="/analytics"
               className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === '/analytics'
@@ -146,7 +178,7 @@ const Navbar: React.FC = () => {
               }`}
             >
               Analytics
-            </Link>
+            </Link> */}
             <Link
               to="/liquid-auth"
               className={`text-sm font-medium transition-colors duration-200 ${
@@ -158,58 +190,175 @@ const Navbar: React.FC = () => {
               Liquid Auth
             </Link>
             <Link
-              to="/hackathon-demo"
+              to="/trustscore"
               className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/hackathon-demo'
+                location.pathname === '/trustscore'
                   ? `${isHomePage ? 'text-purple-400 border-b-2 border-purple-400' : 'text-purple-600 border-b-2 border-purple-600'} pb-1`
                   : `${isHomePage ? 'text-gray-300 hover:text-purple-400' : 'text-gray-700 hover:text-purple-600'}`
               }`}
             >
-              🏆 Hackathon Demo
+              Trust Score
             </Link>
           </div>
 
           {/* Connect Wallet Button & Balance */}
           <div className="flex items-center space-x-4">
             {activeAddress ? (
-              <div className="flex items-center space-x-4">
-                {/* Balance Display */}
-                <div className={`flex items-center space-x-2 ${isHomePage ? 'bg-gray-800' : 'bg-gray-50'} px-3 py-2 rounded-lg`}>
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="relative">
+                {/* Wallet Info Button */}
+                <button
+                  onClick={() => setShowWalletMenu(!showWalletMenu)}
+                  className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                    isHomePage ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-gray-50 hover:bg-gray-100 text-gray-900'
+                  }`}
+                >
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <div className="text-sm">
-                    <span className={`${isHomePage ? 'text-gray-300' : 'text-gray-600'} font-medium`}>Balance:</span>
-                    <span className={`ml-1 font-bold ${isHomePage ? 'text-white' : 'text-gray-900'}`}>
-                      {loadingBalance ? (
-                        <span className={isHomePage ? 'text-gray-400' : 'text-gray-400'}>Loading...</span>
-                      ) : (
-                        `${(balance / 1000000).toFixed(2)} ALGO`
-                      )}
-                    </span>
+                    <div className="font-medium">{loadingBalance ? 'Loading...' : `${(balance / 1000000).toFixed(2)} ALGO`}</div>
+                    <div className={`text-xs ${isHomePage ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {activeAddress.slice(0, 6)}...{activeAddress.slice(-4)}
+                    </div>
                   </div>
-                </div>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${showWalletMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
 
-                {/* Address Display */}
-                <div className={`text-sm ${isHomePage ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <span className="font-medium">Connected:</span>
-                  <span className={`ml-1 font-mono text-xs ${isHomePage ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {activeAddress.slice(0, 6)}...{activeAddress.slice(-4)}
-                  </span>
-                </div>
+                {/* Wallet Dropdown Menu */}
+                {showWalletMenu && (
+                  <div
+                    className={`dropdown-menu absolute right-0 mt-2 w-64 rounded-lg shadow-lg border z-50 ${
+                      isHomePage ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="mb-4">
+                        <h3 className={`text-sm font-medium ${isHomePage ? 'text-gray-300' : 'text-gray-700'}`}>Wallet Connected</h3>
+                        <p className={`text-xs ${isHomePage ? 'text-gray-400' : 'text-gray-500'} font-mono mt-1`}>{activeAddress}</p>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className={`text-sm ${isHomePage ? 'text-gray-300' : 'text-gray-600'}`}>
+                          <span className="font-medium">Balance:</span>
+                          <span className={`ml-2 font-bold ${isHomePage ? 'text-white' : 'text-gray-900'}`}>
+                            {loadingBalance ? 'Loading...' : `${(balance / 1000000).toFixed(2)} ALGO`}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(activeAddress)
+                            setShowWalletMenu(false)
+                          }}
+                          className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors duration-200 ${
+                            isHomePage ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                          }`}
+                        >
+                          📋 Copy Address
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleWalletDisconnect()
+                            setShowWalletMenu(false)
+                          }}
+                          className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors duration-200 ${
+                            isHomePage ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-red-100 text-red-700 hover:bg-red-200'
+                          }`}
+                        >
+                          🚪 Disconnect
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : null}
 
             {/* Liquid Auth User Display */}
             {liquidAuthUser ? (
-              <div
-                className={`flex items-center space-x-2 ${isHomePage ? 'bg-blue-900/50' : 'bg-blue-50'} px-3 py-2 rounded-lg border ${isHomePage ? 'border-blue-700' : 'border-blue-200'}`}
-              >
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div className="text-sm">
-                  <span className={`${isHomePage ? 'text-blue-300' : 'text-blue-600'} font-medium`}>Liquid Auth:</span>
-                  <span className={`ml-1 font-mono text-xs ${isHomePage ? 'text-blue-200' : 'text-blue-800'}`}>
-                    {liquidAuthUser.did.slice(0, 20)}...
-                  </span>
-                </div>
+              <div className="relative">
+                {/* Liquid Auth Info Button */}
+                <button
+                  onClick={() => setShowLiquidAuthMenu(!showLiquidAuthMenu)}
+                  className={`flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                    isHomePage
+                      ? 'bg-blue-900/50 hover:bg-blue-800/50 text-white border border-blue-700'
+                      : 'bg-blue-50 hover:bg-blue-100 text-gray-900 border border-blue-200'
+                  }`}
+                >
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                  <div className="text-sm">
+                    <div className="font-medium">Liquid Auth</div>
+                    <div className={`text-xs ${isHomePage ? 'text-blue-200' : 'text-blue-600'}`}>{liquidAuthUser.did.slice(0, 20)}...</div>
+                  </div>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${showLiquidAuthMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {/* Liquid Auth Dropdown Menu */}
+                {showLiquidAuthMenu && (
+                  <div
+                    className={`dropdown-menu absolute right-0 mt-2 w-64 rounded-lg shadow-lg border z-50 ${
+                      isHomePage ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="mb-4">
+                        <h3 className={`text-sm font-medium ${isHomePage ? 'text-gray-300' : 'text-gray-700'}`}>Liquid Auth Connected</h3>
+                        <p className={`text-xs ${isHomePage ? 'text-gray-400' : 'text-gray-500'} font-mono mt-1 break-all`}>
+                          {liquidAuthUser.did}
+                        </p>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className={`text-sm ${isHomePage ? 'text-gray-300' : 'text-gray-600'}`}>
+                          <span className="font-medium">Address:</span>
+                          <span className={`ml-2 font-mono text-xs ${isHomePage ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {liquidAuthUser.address}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(liquidAuthUser.did)
+                            setShowLiquidAuthMenu(false)
+                          }}
+                          className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors duration-200 ${
+                            isHomePage ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                          }`}
+                        >
+                          📋 Copy DID
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleLiquidAuthLogout()
+                            setShowLiquidAuthMenu(false)
+                          }}
+                          className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors duration-200 ${
+                            isHomePage ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-red-100 text-red-700 hover:bg-red-200'
+                          }`}
+                        >
+                          🚪 Logout
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : null}
 

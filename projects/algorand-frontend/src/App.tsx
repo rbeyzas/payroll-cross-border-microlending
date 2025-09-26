@@ -73,7 +73,7 @@ export default function App() {
               <Route path="/payroll" element={<PayrollPage />} />
               <Route path="/microlending" element={<MicroloanPage />} />
               <Route path="/liquid-auth" element={<LiquidAuthPage />} />
-              <Route path="/hackathon-demo" element={<HackathonDemo />} />
+              <Route path="/trustscore" element={<HackathonDemo />} />
               <Route path="/analytics" element={<Home />} />
             </Routes>
           </div>

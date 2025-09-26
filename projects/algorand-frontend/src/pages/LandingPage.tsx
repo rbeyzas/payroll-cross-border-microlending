@@ -61,11 +61,6 @@ const LandingPage: React.FC = () => {
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm font-medium mb-8 shadow-lg">
-              <span className="w-2 h-2 bg-white rounded-full mr-3 animate-pulse"></span>
-              🚀 Hackathon MVP - Algorand Cross-Border Microlending
-            </div>
-
             <h1 className="text-6xl md:text-8xl font-bold mb-8">
               <span className="block text-white">Cross-Border</span>
               <span className="block bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-pulse">
@@ -98,10 +93,10 @@ const LandingPage: React.FC = () => {
                 </Link>
               )}
               <Link
-                to="/hackathon-demo"
+                to="/trustscore"
                 className="group border-2 border-gray-600 text-gray-300 px-10 py-5 rounded-2xl font-bold text-xl hover:border-green-400 hover:text-green-400 transition-all duration-300 hover:bg-gray-800/50 backdrop-blur-sm"
               >
-                View Demo
+                Trust Score
               </Link>
             </div>
 
@@ -277,10 +272,10 @@ const LandingPage: React.FC = () => {
               </Link>
             )}
             <Link
-              to="/hackathon-demo"
+              to="/trustscore"
               className="group relative border-2 border-white text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white hover:text-green-600 transition-all duration-300 backdrop-blur-sm"
             >
-              View Live Demo
+              Trust Score
             </Link>
           </div>
         </div>
@@ -311,8 +306,8 @@ const LandingPage: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/hackathon-demo" className="hover:text-green-400 transition-colors">
-                    Hackathon Demo
+                  <Link to="/trustscore" className="hover:text-green-400 transition-colors">
+                    Trust Score
                   </Link>
                 </li>
                 <li>
