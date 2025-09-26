@@ -5,7 +5,7 @@ export function getAlgodConfigFromViteEnvironment(): AlgoViteClientConfig {
   return {
     server: import.meta.env.VITE_ALGOD_SERVER || 'https://testnet-api.algonode.cloud',
     port: import.meta.env.VITE_ALGOD_PORT || '443',
-    token: import.meta.env.VITE_ALGOD_TOKEN || '',
+    token: import.meta.env.VITE_ALGOD_TOKEN || 'testnet-token',
     network: import.meta.env.VITE_ALGOD_NETWORK || 'testnet',
   }
 }
@@ -15,7 +15,7 @@ export function getIndexerConfigFromViteEnvironment(): AlgoViteClientConfig {
   return {
     server: import.meta.env.VITE_INDEXER_SERVER || 'https://testnet-idx.algonode.cloud',
     port: import.meta.env.VITE_INDEXER_PORT || '443',
-    token: import.meta.env.VITE_INDEXER_TOKEN || '',
+    token: import.meta.env.VITE_INDEXER_TOKEN || 'testnet-token',
     network: import.meta.env.VITE_ALGOD_NETWORK || 'testnet',
   }
 }

@@ -59,6 +59,46 @@ services:
     networks:
       - liquid-auth-network
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: microlending-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      ALGOD_SERVER: https://testnet-api.algonode.cloud
+      ALGOD_PORT: ""
+      ALGOD_TOKEN: ""
+      ALGOD_NETWORK: testnet
+      CONTRACT_APP_ID: "746230222"
+      CONTRACT_ADDRESS: "JYSDGLSFX6IJEMV3QQK47H32AI7QL7FHOLNV6YXCXOQVDUPLVP6YLSF2FQ"
+      GOPLAUSIBLE_RESOLVER: https://resolver.goplausible.xyz/resolve
+    networks:
+      - liquid-auth-network
+
+  frontend:
+    build:
+      context: ./projects/algorand-frontend
+      dockerfile: Dockerfile
+    container_name: microlending-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: http://localhost:3001
+      VITE_ALGOD_NETWORK: testnet
+      VITE_ALGOD_SERVER: https://testnet-api.algonode.cloud
+      VITE_ALGOD_PORT: ""
+      VITE_ALGOD_TOKEN: ""
+    depends_on:
+      - backend
+    networks:
+      - liquid-auth-network
+
 volumes:
   mongo_data:
   redis_data:

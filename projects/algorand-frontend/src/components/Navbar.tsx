@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
         const algorand = AlgorandClient.fromConfig({ algodConfig })
 
         const accountInfo = await algorand.account.getInformation(activeAddress)
-        setBalance(Number(accountInfo.amount))
+        setBalance(Number(accountInfo.amount || 0))
       } catch (error) {
         // Error fetching balance
         setBalance(0)
@@ -139,6 +139,16 @@ const Navbar: React.FC = () => {
               }`}
             >
               Liquid Auth
+            </Link>
+            <Link
+              to="/hackathon-demo"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                location.pathname === '/hackathon-demo'
+                  ? 'text-purple-600 border-b-2 border-purple-600 pb-1'
+                  : 'text-gray-700 hover:text-purple-600'
+              }`}
+            >
+              🏆 Hackathon Demo
             </Link>
           </div>
 

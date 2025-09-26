@@ -45,7 +45,7 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
       }
 
       enqueueSnackbar(`Response from the contract: ${response.return}`, { variant: 'success' })
-    } catch (e: Error) {
+    } catch (e: any) {
       enqueueSnackbar(`Error connecting to contract: ${e.message}`, { variant: 'error' })
     } finally {
       setLoading(false)

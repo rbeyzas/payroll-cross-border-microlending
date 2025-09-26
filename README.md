@@ -346,3 +346,11 @@ MIT License - Detaylar için LICENSE dosyasına bakın.
 ---
 
 **Built with ❤️ on Algorand Blockchain**
+
+# Start all services
+
+docker-compose up -d
+
+# Run integration tests
+
+node test-mvp.js

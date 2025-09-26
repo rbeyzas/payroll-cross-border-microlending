@@ -77,10 +77,10 @@ const PayrollWizard: React.FC = () => {
       // Check if account has sufficient balance
       const accountInfo = await algorand.account.getInformation(activeAddress!)
 
-      if (accountInfo.amount < 100000) {
+      if ((accountInfo.amount || 0) < 100000) {
         // Less than 0.1 ALGO
         setError(
-          `Insufficient balance. You need at least 0.1 ALGO. Current balance: ${accountInfo.amount / 1000000} ALGO. Please get testnet ALGO from: https://testnet.algoexplorer.io/dispenser`,
+          `Insufficient balance. You need at least 0.1 ALGO. Current balance: ${(accountInfo.amount || 0) / 1000000} ALGO. Please get testnet ALGO from: https://testnet.algoexplorer.io/dispenser`,
         )
         return
       }

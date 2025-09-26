@@ -91,7 +91,7 @@ export default function MicroloanWizard() {
       const algorand = AlgorandClient.fromConfig({ algodConfig })
 
       const accountInfo = await algorand.account.getInformation(CONTRACT_ADDRESS)
-      setContractBalance(Number(accountInfo.amount))
+      setContractBalance(Number(accountInfo.amount || 0))
     } catch (err) {
       console.error('Failed to load contract balance:', err)
     }
