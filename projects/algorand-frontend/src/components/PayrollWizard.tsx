@@ -30,6 +30,7 @@ const PayrollWizard: React.FC = () => {
   const [error, setError] = useState('')
   const [liquidAuthUser, setLiquidAuthUser] = useState<any>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [createdPayrollId, setCreatedPayrollId] = useState<string | null>(null)
 
   // Check authentication status
   useEffect(() => {
@@ -70,6 +71,26 @@ const PayrollWizard: React.FC = () => {
     try {
       console.log('Creating payroll with:', payrollData.asaId, payrollData.cycleSecs, activeAddress)
 
+      // First create payroll in backend
+      const backendResponse = await fetch('http://localhost:3001/api/payrolls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address: activeAddress,
+          name: `Payroll ${new Date().toISOString().split('T')[0]}`,
+          description: `Payroll created on ${new Date().toLocaleDateString()}`,
+          asaId: payrollData.asaId || '0',
+        }),
+      })
+
+      if (!backendResponse.ok) {
+        throw new Error('Failed to create payroll in backend')
+      }
+
+      const backendPayroll = await backendResponse.json()
+      console.log('Backend payroll created:', backendPayroll)
+      setCreatedPayrollId(backendPayroll.id)
+
       // Use the same config method as working components
       const algodConfig = getAlgodConfigFromViteEnvironment()
       const algorand = AlgorandClient.fromConfig({ algodConfig })
@@ -108,7 +129,6 @@ const PayrollWizard: React.FC = () => {
       console.log('Transaction result:', result)
       console.log('Payroll created successfully!')
 
-      console.log('Payroll created successfully!')
       setCurrentStep(2)
     } catch (err) {
       setError('Failed to create payroll contract')
@@ -118,8 +138,30 @@ const PayrollWizard: React.FC = () => {
     }
   }
 
-  const handleAddEmployee = () => {
-    setCurrentStep(3)
+  const handleAddEmployee = async () => {
+    if (!createdPayrollId) {
+      setError('No payroll created yet')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      // Save all employees to backend
+      for (const employee of payrollData.employees) {
+        if (employee.address && employee.amount > 0) {
+          await saveEmployeeToBackend(employee)
+        }
+      }
+
+      setCurrentStep(3)
+    } catch (err) {
+      setError('Failed to save employees')
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleFundPayroll = async () => {
@@ -250,7 +292,12 @@ const PayrollWizard: React.FC = () => {
     }
   }
 
-  const addEmployee = () => {
+  const addEmployee = async () => {
+    if (!createdPayrollId) {
+      setError('No payroll created yet')
+      return
+    }
+
     const newEmployee: Employee = {
       address: '',
       amount: 0,
@@ -260,6 +307,31 @@ const PayrollWizard: React.FC = () => {
       ...prev,
       employees: [...prev.employees, newEmployee],
     }))
+  }
+
+  const saveEmployeeToBackend = async (employee: Employee) => {
+    if (!createdPayrollId) return
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/payrolls/${createdPayrollId}/employees`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `Employee ${employee.address.slice(0, 8)}`,
+          address: employee.address,
+          salary: employee.amount,
+          position: 'Employee',
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save employee to backend')
+      }
+
+      console.log('Employee saved to backend')
+    } catch (err) {
+      console.error('Error saving employee:', err)
+    }
   }
 
   const updateEmployee = (index: number, field: keyof Employee, value: string | number | boolean) => {

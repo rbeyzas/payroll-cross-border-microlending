@@ -10,25 +10,64 @@ interface User {
 
 const LiquidAuthPage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null)
-  const [loginHistory, setLoginHistory] = useState<string[]>([])
+  const [loginHistory, setLoginHistory] = useState<any[]>([])
+  const [loadingHistory, setLoadingHistory] = useState(false)
+
+  // Fetch login history from backend
+  const fetchLoginHistory = async (did: string) => {
+    if (!did) return
+
+    setLoadingHistory(true)
+    try {
+      const response = await fetch(`http://localhost:3001/api/login-history/${encodeURIComponent(did)}`)
+      if (response.ok) {
+        const data = await response.json()
+        setLoginHistory(data.loginHistory || [])
+      } else {
+        console.error('Failed to fetch login history')
+        setLoginHistory([])
+      }
+    } catch (error) {
+      console.error('Error fetching login history:', error)
+      setLoginHistory([])
+    } finally {
+      setLoadingHistory(false)
+    }
+  }
 
   const handleLogin = (userData: User) => {
     setUser(userData)
-    const timestamp = new Date().toLocaleString()
-    setLoginHistory((prev) => [...prev, `Logged in at ${timestamp} - DID: ${userData.did}`])
+    // Fetch login history from backend
+    fetchLoginHistory(userData.did)
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUser(null)
-    const timestamp = new Date().toLocaleString()
-    setLoginHistory((prev) => [...prev, `Logged out at ${timestamp}`])
+    setLoginHistory([])
+
+    // Store logout event in backend
+    try {
+      await fetch('http://localhost:3001/api/login-history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          did: user?.did || 'unknown',
+          event: 'Liquid Auth logout successful',
+          timestamp: new Date().toISOString(),
+          ipAddress: 'unknown',
+          userAgent: navigator.userAgent,
+        }),
+      })
+    } catch (error) {
+      console.error('Failed to store logout history:', error)
+    }
   }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Liquid Auth Integration Demo</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Liquid Auth Integration</h1>
           <p className="text-lg text-gray-600">Experience secure authentication with Algorand wallets and Passkeys</p>
         </div>
 
@@ -85,11 +124,37 @@ const LiquidAuthPage: React.FC = () => {
         {/* Login History */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Login History</h2>
-          {loginHistory.length > 0 ? (
-            <div className="space-y-2">
+          {loadingHistory ? (
+            <div className="text-center py-4">
+              <div className="inline-flex items-center space-x-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                <span className="text-gray-600">Loading login history...</span>
+              </div>
+            </div>
+          ) : loginHistory.length > 0 ? (
+            <div className="space-y-3">
               {loginHistory.map((entry, index) => (
-                <div key={index} className="p-3 bg-gray-50 border border-gray-200 rounded text-sm">
-                  {entry}
+                <div key={entry.id || index} className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800">{entry.event}</p>
+                      <p className="text-sm text-gray-600 mt-1">{new Date(entry.timestamp).toLocaleString()}</p>
+                      {entry.ipAddress && <p className="text-xs text-gray-500 mt-1">IP: {entry.ipAddress}</p>}
+                    </div>
+                    <div className="text-right">
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                          entry.event.includes('successful')
+                            ? 'bg-green-100 text-green-800'
+                            : entry.event.includes('failed')
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-blue-100 text-blue-800'
+                        }`}
+                      >
+                        {entry.event.includes('successful') ? '✅' : entry.event.includes('failed') ? '❌' : '📝'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -99,7 +164,7 @@ const LiquidAuthPage: React.FC = () => {
         </div>
 
         {/* Features Overview */}
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+        {/* <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="p-4 border border-gray-200 rounded-lg">
@@ -127,34 +192,7 @@ const LiquidAuthPage: React.FC = () => {
               <p className="text-sm text-gray-600">Works across desktop and mobile browsers</p>
             </div>
           </div>
-        </div>
-
-        {/* Technical Details */}
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Technical Implementation</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-2">Backend Stack</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Liquid Auth Server (Node.js)</li>
-                <li>• MongoDB for user storage</li>
-                <li>• Redis for session management</li>
-                <li>• Docker containerization</li>
-                <li>• Socket.IO for real-time communication</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-2">Frontend Stack</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• React with TypeScript</li>
-                <li>• Vite for development</li>
-                <li>• TailwindCSS for styling</li>
-                <li>• WebAuthn API integration</li>
-                <li>• Algorand wallet integration</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

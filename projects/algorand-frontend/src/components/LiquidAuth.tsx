@@ -91,9 +91,33 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
     setError(null)
 
     try {
-      // Since Liquid Auth API is not working properly, use direct WebAuthn
-      await registerWithDirectWebAuthn()
-      return
+      // Use real Liquid Auth API
+      if (!socket) {
+        throw new Error('Not connected to Liquid Auth server')
+      }
+
+      // Emit registration request to Liquid Auth server
+      socket.emit('register_request', {
+        username: 'user@example.com',
+        displayName: 'Demo User',
+      })
+
+      // Wait for server response
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Registration timeout'))
+        }, 30000)
+
+        socket.once('attestation_success', (data) => {
+          clearTimeout(timeout)
+          resolve(data)
+        })
+
+        socket.once('attestation_error', (error) => {
+          clearTimeout(timeout)
+          reject(new Error(error.message || 'Registration failed'))
+        })
+      })
     } catch (err) {
       console.error('Registration error:', err)
       setError(err instanceof Error ? err.message : 'Registration failed')
@@ -150,6 +174,23 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
       // Save user data to localStorage for persistence
       localStorage.setItem('liquidAuthUser', JSON.stringify(userData))
 
+      // Store login event in backend
+      try {
+        await fetch('http://localhost:3001/api/login-history', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            did: userData.did,
+            event: 'Passkey registration successful',
+            timestamp: new Date().toISOString(),
+            ipAddress: 'unknown',
+            userAgent: navigator.userAgent,
+          }),
+        })
+      } catch (error) {
+        console.error('Failed to store registration history:', error)
+      }
+
       if (onLogin) {
         onLogin(userData)
       }
@@ -187,9 +228,32 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
         }
       }
 
-      // Since Liquid Auth API is not working properly, use direct WebAuthn
-      await loginWithDirectWebAuthn()
-      return
+      // Use real Liquid Auth API
+      if (!socket) {
+        throw new Error('Not connected to Liquid Auth server')
+      }
+
+      // Emit login request to Liquid Auth server
+      socket.emit('login_request', {
+        username: 'user@example.com',
+      })
+
+      // Wait for server response
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Login timeout'))
+        }, 30000)
+
+        socket.once('assertion_success', (data) => {
+          clearTimeout(timeout)
+          resolve(data)
+        })
+
+        socket.once('assertion_error', (error) => {
+          clearTimeout(timeout)
+          reject(new Error(error.message || 'Login failed'))
+        })
+      })
     } catch (err) {
       console.error('Login error:', err)
       setError(err instanceof Error ? err.message : 'Login failed')
@@ -232,6 +296,23 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
 
       // Save user data to localStorage for persistence
       localStorage.setItem('liquidAuthUser', JSON.stringify(userData))
+
+      // Store login event in backend
+      try {
+        await fetch('http://localhost:3001/api/login-history', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            did: userData.did,
+            event: 'Passkey login successful',
+            timestamp: new Date().toISOString(),
+            ipAddress: 'unknown',
+            userAgent: navigator.userAgent,
+          }),
+        })
+      } catch (error) {
+        console.error('Failed to store login history:', error)
+      }
 
       if (onLogin) {
         onLogin(userData)
@@ -344,6 +425,24 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
         }
 
         setUser(userData)
+
+        // Store login event in backend
+        try {
+          await fetch('http://localhost:3001/api/login-history', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              did: userData.did,
+              event: 'Wallet login successful',
+              timestamp: new Date().toISOString(),
+              ipAddress: 'unknown',
+              userAgent: navigator.userAgent,
+            }),
+          })
+        } catch (error) {
+          console.error('Failed to store login history:', error)
+        }
+
         if (onLogin) {
           onLogin(userData)
         }
@@ -357,11 +456,28 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
   }
 
   // Logout
-  const logout = () => {
+  const logout = async () => {
     setUser(null)
 
     // Clear user data from localStorage
     localStorage.removeItem('liquidAuthUser')
+
+    // Store logout event in backend
+    try {
+      await fetch('http://localhost:3001/api/login-history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          did: user?.did || 'unknown',
+          event: 'Logout successful',
+          timestamp: new Date().toISOString(),
+          ipAddress: 'unknown',
+          userAgent: navigator.userAgent,
+        }),
+      })
+    } catch (error) {
+      console.error('Failed to store logout history:', error)
+    }
 
     if (onLogout) {
       onLogout()

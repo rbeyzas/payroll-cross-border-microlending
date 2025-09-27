@@ -197,10 +197,8 @@ const HackathonDemo: React.FC = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Hackathon Demo</h2>
-          <p className="text-gray-600 mb-6">
-            Please login with Liquid Auth or connect your wallet to see the cross-border microlending demo.
-          </p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Trust Score Platform</h2>
+          <p className="text-gray-600 mb-6">Please login with Liquid Auth or connect your wallet to see the trust score analysis.</p>
           <div className="space-y-3">
             <a
               href="/liquid-auth"
@@ -225,8 +223,8 @@ const HackathonDemo: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">🏆 Hackathon Demo: Cross-Border Microlending</h1>
-          <p className="text-xl text-gray-600 mb-8">Liquid Auth + GoPlausible DID Integration</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Trust Score Analysis</h1>
+          <p className="text-xl text-gray-600 mb-8">Real-time Trust Scoring with Liquid Auth + GoPlausible DID</p>
 
           {/* Demo Mode Selector */}
           <div className="flex justify-center space-x-4 mb-8">
@@ -358,7 +356,7 @@ const HackathonDemo: React.FC = () => {
         {/* Demo Scenario */}
         {demoMode && (
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">🎯 {demoMode === 'borrower' ? 'Borrower' : 'Lender'} Scenario</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">🎯 {demoMode === 'borrower' ? 'Borrower' : 'Lender'} Trust Analysis</h2>
             <div className="prose max-w-none">
               {demoMode === 'borrower' ? (
                 <div>
