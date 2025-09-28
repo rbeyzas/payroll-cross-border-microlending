@@ -16,8 +16,8 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
 
     try {
       // Simulate a contract call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       enqueueSnackbar(`Demo response: Hello ${contractInput}!`, { variant: 'success' })
     } catch (e: any) {
       enqueueSnackbar(`Error: ${e.message}`, { variant: 'error' })

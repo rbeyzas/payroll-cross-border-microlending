@@ -98,14 +98,14 @@ const FileSharingPage: React.FC = () => {
         signaling.onMessage('offer', async (message) => {
           try {
             console.log('Received offer from:', message.from)
-            // Initialize as receiver if not already initialized
-            if (!webrtc.isConnectionInitialized()) {
-              await webrtc.initializeAsReceiver()
-            }
+            // Close any existing connection and initialize as receiver
+            webrtc.close()
+            await webrtc.initializeAsReceiver()
             const answer = await webrtc.handleOffer(message.data)
             signaling.sendAnswer(message.from, answer, activeAddress || 'unknown')
           } catch (error) {
             console.error('Error handling offer:', error)
+            webrtc.close()
           }
         })
 
@@ -115,6 +115,7 @@ const FileSharingPage: React.FC = () => {
             await webrtc.handleAnswer(message.data)
           } catch (error) {
             console.error('Error handling answer:', error)
+            webrtc.close()
           }
         })
 
@@ -129,6 +130,7 @@ const FileSharingPage: React.FC = () => {
             }
           } catch (error) {
             console.error('Error handling ICE candidate:', error)
+            webrtc.close()
           }
         })
 
@@ -445,6 +447,9 @@ const FileSharingPage: React.FC = () => {
         },
       })
 
+      // Close any existing connection before initializing a new one
+      webrtcTransfer.close()
+
       // Initialize as sender and create offer
       await webrtcTransfer.initializeAsSender()
 
@@ -513,6 +518,12 @@ const FileSharingPage: React.FC = () => {
     } catch (error) {
       console.error('Error sending file via WebRTC:', error)
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
+      // Reset the connection on error
+      if (webrtcTransfer) {
+        webrtcTransfer.close()
+      }
+
       setFileTransferState((prev) => ({
         ...prev,
         status: `Transfer failed: ${errorMessage}`,
