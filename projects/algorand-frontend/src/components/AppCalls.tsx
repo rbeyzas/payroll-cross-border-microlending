@@ -1,9 +1,5 @@
-import { useWallet } from '@txnlab/use-wallet-react'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import { HelloWorldClient } from '../contracts/HelloWorld'
-import { getAlgodConfigFromViteEnvironment, getIndexerConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
-import { AlgorandClient } from '@algorandfoundation/algokit-utils'
 
 interface AppCallsInterface {
   openModal: boolean
@@ -14,39 +10,17 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [contractInput, setContractInput] = useState<string>('')
   const { enqueueSnackbar } = useSnackbar()
-  const { transactionSigner, activeAddress } = useWallet()
-
-  const algodConfig = getAlgodConfigFromViteEnvironment()
-  const indexerConfig = getIndexerConfigFromViteEnvironment()
-  const algorand = AlgorandClient.fromConfig({
-    algodConfig,
-    indexerConfig,
-  })
-  algorand.setDefaultSigner(transactionSigner)
 
   const sendAppCall = async () => {
     setLoading(true)
 
     try {
-      // Use the already deployed contract from testnet
-      const appClient = await HelloWorldClient.fromNetwork({
-        algorand,
-        defaultSender: activeAddress ?? undefined,
-      })
-
-      const response = await appClient.send.hello({ args: { name: contractInput } }).catch((e: Error) => {
-        enqueueSnackbar(`Error calling the contract: ${e.message}`, { variant: 'error' })
-        setLoading(false)
-        return undefined
-      })
-
-      if (!response) {
-        return
-      }
-
-      enqueueSnackbar(`Response from the contract: ${response.return}`, { variant: 'success' })
+      // Simulate a contract call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      enqueueSnackbar(`Demo response: Hello ${contractInput}!`, { variant: 'success' })
     } catch (e: any) {
-      enqueueSnackbar(`Error connecting to contract: ${e.message}`, { variant: 'error' })
+      enqueueSnackbar(`Error: ${e.message}`, { variant: 'error' })
     } finally {
       setLoading(false)
     }
