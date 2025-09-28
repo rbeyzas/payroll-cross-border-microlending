@@ -1,0 +1,8 @@
+{
+  "app_id": 0,
+  "app_address": "MOCK_ADDRESS_FOR_DEMO",
+  "admin_address": "MOCK_ADMIN_ADDRESS",
+  "network": "testnet",
+  "deployment_time": "2025-09-28T01:42:27.885518",
+  "status": "demo_mode"
+}
