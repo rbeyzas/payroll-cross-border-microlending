@@ -122,7 +122,7 @@ const LiquidAuthPage: React.FC = () => {
         </div>
 
         {/* Login History */}
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+        {/* <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Login History</h2>
           {loadingHistory ? (
             <div className="text-center py-4">
@@ -161,7 +161,7 @@ const LiquidAuthPage: React.FC = () => {
           ) : (
             <p className="text-gray-500 text-center">No login activity yet.</p>
           )}
-        </div>
+        </div> */}
 
         {/* Features Overview */}
         {/* <div className="mt-8 bg-white rounded-lg shadow-lg p-6">

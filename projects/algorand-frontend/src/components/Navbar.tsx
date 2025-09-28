@@ -180,6 +180,16 @@ const Navbar: React.FC = () => {
               Analytics
             </Link> */}
             <Link
+              to="/file-sharing"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                location.pathname === '/file-sharing'
+                  ? `${isHomePage ? 'text-purple-400 border-b-2 border-purple-400' : 'text-purple-600 border-b-2 border-purple-600'} pb-1`
+                  : `${isHomePage ? 'text-gray-300 hover:text-purple-400' : 'text-gray-700 hover:text-purple-600'}`
+              }`}
+            >
+              File Sharing
+            </Link>
+            <Link
               to="/liquid-auth"
               className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === '/liquid-auth'
@@ -408,14 +418,34 @@ const Navbar: React.FC = () => {
             Microlending
           </Link>
           <Link
-            to="/analytics"
+            to="/file-sharing"
             className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/analytics'
+              location.pathname === '/file-sharing'
+                ? `${isHomePage ? 'text-purple-400 bg-purple-900/50' : 'text-purple-600 bg-purple-50'}`
+                : `${isHomePage ? 'text-gray-300 hover:text-purple-400 hover:bg-gray-700' : 'text-gray-700 hover:text-purple-600 hover:bg-gray-100'}`
+            }`}
+          >
+            File Sharing
+          </Link>
+          <Link
+            to="/liquid-auth"
+            className={`block px-3 py-2 text-base font-medium ${
+              location.pathname === '/liquid-auth'
                 ? `${isHomePage ? 'text-blue-400 bg-blue-900/50' : 'text-blue-600 bg-blue-50'}`
                 : `${isHomePage ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-700' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'}`
             }`}
           >
-            Analytics
+            Liquid Auth
+          </Link>
+          <Link
+            to="/trustscore"
+            className={`block px-3 py-2 text-base font-medium ${
+              location.pathname === '/trustscore'
+                ? `${isHomePage ? 'text-purple-400 bg-purple-900/50' : 'text-purple-600 bg-purple-50'}`
+                : `${isHomePage ? 'text-gray-300 hover:text-purple-400 hover:bg-gray-700' : 'text-gray-700 hover:text-purple-600 hover:bg-gray-100'}`
+            }`}
+          >
+            Trust Score
           </Link>
         </div>
       </div>
