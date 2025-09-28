@@ -489,7 +489,23 @@ export class WebRTCFileTransfer {
    * Check if connection is initialized
    */
   isConnectionInitialized(): boolean {
-    return this.isInitialized && this.connection !== null
+    return this.isInitialized && this.connection !== null && this.connection.peerConnection !== null
+  }
+
+  /**
+   * Wait for connection to be ready with timeout
+   */
+  async waitForConnectionReady(timeoutMs: number = 10000): Promise<boolean> {
+    const startTime = Date.now()
+
+    while (Date.now() - startTime < timeoutMs) {
+      if (this.isConnectionInitialized()) {
+        return true
+      }
+      await new Promise((resolve) => setTimeout(resolve, 100))
+    }
+
+    return false
   }
 }
 

@@ -42,6 +42,10 @@ const FileSharingPage: React.FC = () => {
   const [useIPFS, setUseIPFS] = useState(false)
   const [fileHash, setFileHash] = useState('')
 
+  // File transfer configuration
+  const FILE_SIZE_THRESHOLD = 10 * 1024 * 1024 // 10MB threshold for IPFS
+  const MAX_WEBRTC_SIZE = 50 * 1024 * 1024 // 50MB max for WebRTC
+
   // Receive file state
   const [pendingRequests, setPendingRequests] = useState<FileRequest[]>([])
   const [_selectedRequest, _setSelectedRequest] = useState<FileRequest | null>(null)
@@ -112,7 +116,34 @@ const FileSharingPage: React.FC = () => {
         signaling.onMessage('answer', async (message) => {
           try {
             console.log('Received answer from:', message.from)
-            await webrtc.handleAnswer(message.data)
+            // Wait for connection to be properly initialized with retry mechanism
+            let retries = 0
+            const maxRetries = 10
+            const retryDelay = 500
+
+            const handleAnswerWithRetry = async () => {
+              // Wait for connection to be ready
+              const isReady = await webrtc.waitForConnectionReady(5000)
+
+              if (isReady) {
+                try {
+                  await webrtc.handleAnswer(message.data)
+                  console.log('✅ Answer handled successfully')
+                } catch (error) {
+                  console.error('Error handling answer:', error)
+                  webrtc.close()
+                }
+              } else if (retries < maxRetries) {
+                retries++
+                console.log(`Answer received but connection not initialized, retrying... (${retries}/${maxRetries})`)
+                setTimeout(handleAnswerWithRetry, retryDelay)
+              } else {
+                console.error('Connection still not initialized after maximum retries')
+                webrtc.close()
+              }
+            }
+
+            handleAnswerWithRetry()
           } catch (error) {
             console.error('Error handling answer:', error)
             webrtc.close()
@@ -122,15 +153,37 @@ const FileSharingPage: React.FC = () => {
         signaling.onMessage('ice-candidate', async (message) => {
           try {
             console.log('Received ICE candidate from:', message.from)
-            // Only add ICE candidate if connection is initialized
-            if (webrtc.isConnectionInitialized()) {
-              await webrtc.addIceCandidate(message.data)
-            } else {
-              console.warn('ICE candidate received but connection not initialized')
+            // Wait for connection to be properly initialized with retry mechanism
+            let retries = 0
+            const maxRetries = 10
+            const retryDelay = 500
+
+            const handleIceCandidateWithRetry = async () => {
+              // Wait for connection to be ready
+              const isReady = await webrtc.waitForConnectionReady(3000)
+
+              if (isReady) {
+                try {
+                  await webrtc.addIceCandidate(message.data)
+                  console.log('✅ ICE candidate added successfully')
+                } catch (error) {
+                  console.error('Error adding ICE candidate:', error)
+                  // Don't close connection for ICE candidate errors, just log them
+                }
+              } else if (retries < maxRetries) {
+                retries++
+                console.log(`ICE candidate received but connection not initialized, retrying... (${retries}/${maxRetries})`)
+                setTimeout(handleIceCandidateWithRetry, retryDelay)
+              } else {
+                console.warn('Connection still not initialized after maximum retries for ICE candidate')
+                // Don't close connection, just log the warning
+              }
             }
+
+            handleIceCandidateWithRetry()
           } catch (error) {
             console.error('Error handling ICE candidate:', error)
-            webrtc.close()
+            // Don't close connection for ICE candidate errors
           }
         })
 
@@ -362,60 +415,228 @@ const FileSharingPage: React.FC = () => {
     const file = event.target.files?.[0]
     if (file) {
       setSelectedFile(file)
-      setUseIPFS(file.size > 1024 * 1024) // Use IPFS for files > 1MB
+
+      // Determine transfer method based on file size
+      if (file.size > FILE_SIZE_THRESHOLD) {
+        setUseIPFS(true) // Use IPFS for large files
+      } else if (file.size > MAX_WEBRTC_SIZE) {
+        setError(`File too large (${(file.size / 1024 / 1024).toFixed(2)}MB). Maximum size is ${MAX_WEBRTC_SIZE / 1024 / 1024}MB.`)
+        return
+      } else {
+        setUseIPFS(false) // Use WebRTC for small files
+      }
+
       setError('')
     }
   }
 
-  const uploadToIPFS = async (file: File): Promise<string> => {
+  // Payment and escrow functions
+  const createPaymentEscrow = async (fileRequest: FileRequest): Promise<string> => {
+    if (!activeAddress || !transactionSigner) {
+      throw new Error('Wallet not connected')
+    }
+
     try {
-      console.log('Uploading file to IPFS:', file.name)
+      const algorand = AlgorandClient.fromConfig({
+        algodConfig: getAlgodConfigFromViteEnvironment(),
+      })
+      algorand.setDefaultSigner(transactionSigner)
 
-      // Create FormData for IPFS upload
-      const formData = new FormData()
-      formData.append('file', file)
-
-      // Use a public IPFS gateway or service
-      // For demo purposes, we'll use a public IPFS service
-      const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
-        method: 'POST',
-        headers: {
-          pinata_api_key: process.env.VITE_PINATA_API_KEY || '',
-          pinata_secret_api_key: process.env.VITE_PINATA_SECRET_KEY || '',
-        },
-        body: formData,
+      const fileContractClient = new FileSharingAppClient({
+        algorand,
+        defaultSender: activeAddress,
+        appId: BigInt(746505672),
       })
 
-      if (!response.ok) {
-        // Fallback to local IPFS or other service
-        throw new Error('Pinata upload failed, trying alternative...')
+      // Check if contract exists
+      try {
+        await algorand.app.getById(fileContractClient.appId)
+        console.log('Contract found and ready')
+      } catch (error) {
+        console.error('Contract not found or not accessible:', error)
+        throw new Error('File sharing contract is not available. Please ensure the contract is deployed.')
       }
 
-      const result = await response.json()
-      console.log('File uploaded to IPFS:', result.IpfsHash)
-      return result.IpfsHash
-    } catch (error) {
-      console.error('IPFS upload failed:', error)
+      // Create escrow payment transaction
+      const paymentAmount = algo(fileRequest.accessFee)
 
-      // Fallback: Use IPFS public gateway
+      const result = await fileContractClient.send.createFileRequest({
+        args: {
+          fileId: fileRequest.id,
+          recipientAddress: fileRequest.recipient,
+          fileHash: fileRequest.fileHash,
+          fileSize: fileRequest.fileSize.toString(),
+          accessFee: fileRequest.accessFee.toString(),
+          fileType: fileRequest.fileType,
+          isIpfs: fileRequest.isIPFS.toString(),
+          ipfsCid: fileRequest.ipfsCID,
+        },
+        payment: {
+          amount: paymentAmount,
+          receiver: fileContractClient.appAddress,
+        },
+      })
+
+      console.log('Payment escrow created:', result)
+      return result.transaction.txID()
+    } catch (error) {
+      console.error('Error creating payment escrow:', error)
+      throw error
+    }
+  }
+
+  const releaseEscrowPayment = async (fileRequest: FileRequest): Promise<string> => {
+    if (!activeAddress || !transactionSigner) {
+      throw new Error('Wallet not connected')
+    }
+
+    try {
+      const algorand = AlgorandClient.fromConfig({
+        algodConfig: getAlgodConfigFromViteEnvironment(),
+      })
+      algorand.setDefaultSigner(transactionSigner)
+
+      const fileContractClient = new FileSharingAppClient({
+        algorand,
+        defaultSender: activeAddress,
+        appId: BigInt(746505672),
+      })
+
+      // Check if contract exists
       try {
-        const response = await fetch('https://ipfs.infura.io:5001/api/v0/add', {
+        await algorand.app.getById(fileContractClient.appId)
+        console.log('Contract found and ready')
+      } catch (error) {
+        console.error('Contract not found or not accessible:', error)
+        throw new Error('File sharing contract is not available. Please ensure the contract is deployed.')
+      }
+
+      // Release escrow payment to sender
+      const result = await fileContractClient.send.releasePayment({
+        args: {
+          fileId: fileRequest.id,
+          recipient: fileRequest.recipient,
+        },
+      })
+
+      console.log('Escrow payment released:', result)
+      return result.transaction.txID()
+    } catch (error) {
+      console.error('Error releasing escrow payment:', error)
+      throw error
+    }
+  }
+
+  const verifyFileHash = async (file: File, expectedHash: string): Promise<boolean> => {
+    try {
+      const calculatedHash = await calculateFileHash(file)
+      const isValid = calculatedHash === expectedHash
+
+      console.log(`File hash verification: ${isValid ? 'PASSED' : 'FAILED'}`)
+      console.log(`Expected: ${expectedHash}`)
+      console.log(`Calculated: ${calculatedHash}`)
+
+      return isValid
+    } catch (error) {
+      console.error('Error verifying file hash:', error)
+      return false
+    }
+  }
+
+  const downloadFromIPFS = async (cid: string): Promise<File> => {
+    try {
+      console.log(`Downloading file from IPFS: ${cid}`)
+
+      // Try multiple IPFS gateways
+      const gateways = [
+        `https://ipfs.io/ipfs/${cid}`,
+        `https://gateway.pinata.cloud/ipfs/${cid}`,
+        `https://cloudflare-ipfs.com/ipfs/${cid}`,
+      ]
+
+      for (const gateway of gateways) {
+        try {
+          const response = await fetch(gateway)
+          if (response.ok) {
+            const blob = await response.blob()
+            const file = new File([blob], `downloaded-file-${cid}`, { type: blob.type })
+            console.log(`File downloaded from IPFS gateway: ${gateway}`)
+            return file
+          }
+        } catch (error) {
+          console.warn(`Gateway ${gateway} failed:`, error)
+        }
+      }
+
+      throw new Error('All IPFS gateways failed')
+    } catch (error) {
+      console.error('Error downloading from IPFS:', error)
+      throw error
+    }
+  }
+
+  const uploadToIPFS = async (file: File): Promise<string> => {
+    console.log(`Uploading file to IPFS: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
+
+    // Try multiple IPFS services in order of preference
+    const ipfsServices = [
+      // Pinata (if API keys are available)
+      async () => {
+        if (!process.env.VITE_PINATA_API_KEY || !process.env.VITE_PINATA_SECRET_KEY) {
+          throw new Error('Pinata API keys not configured')
+        }
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
           method: 'POST',
-          body: file,
+          headers: {
+            pinata_api_key: process.env.VITE_PINATA_API_KEY,
+            pinata_secret_api_key: process.env.VITE_PINATA_SECRET_KEY,
+          },
+          body: formData,
         })
 
-        if (response.ok) {
-          const result = await response.json()
-          console.log('File uploaded to Infura IPFS:', result.Hash)
-          return result.Hash
-        }
-      } catch (fallbackError) {
-        console.error('IPFS fallback also failed:', fallbackError)
-      }
+        if (!response.ok) throw new Error(`Pinata upload failed: ${response.statusText}`)
 
-      // No fallback - throw error if IPFS upload fails
-      throw new Error('IPFS upload failed on all services. Please try again later.')
+        const result = await response.json()
+        return result.IpfsHash
+      },
+
+      // IPFS.io public gateway (fallback)
+      async () => {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('https://ipfs.io/api/v0/add', {
+          method: 'POST',
+          body: formData,
+        })
+
+        if (!response.ok) throw new Error(`IPFS.io upload failed: ${response.statusText}`)
+
+        const result = await response.json()
+        return result.Hash
+      },
+    ]
+
+    // Try each service until one succeeds
+    for (let i = 0; i < ipfsServices.length; i++) {
+      try {
+        const cid = await ipfsServices[i]()
+        console.log(`File uploaded to IPFS service ${i + 1}: ${cid}`)
+        return cid
+      } catch (error) {
+        console.warn(`IPFS service ${i + 1} failed:`, error)
+        if (i === ipfsServices.length - 1) {
+          // Last service failed, throw error
+          throw new Error(`All IPFS services failed. Last error: ${error}`)
+        }
+      }
     }
+
+    throw new Error('No IPFS services available')
   }
 
   const sendFileViaWebRTC = async (file: File, recipientAddress: string) => {
@@ -450,6 +671,9 @@ const FileSharingPage: React.FC = () => {
       // Close any existing connection before initializing a new one
       webrtcTransfer.close()
 
+      // Wait a moment for cleanup
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
       // Initialize as sender and create offer
       await webrtcTransfer.initializeAsSender()
 
@@ -460,6 +684,9 @@ const FileSharingPage: React.FC = () => {
           signalingClient.sendIceCandidate(recipientAddress, candidate, activeAddress)
         }
       }
+
+      // Wait for connection to be fully initialized
+      await new Promise((resolve) => setTimeout(resolve, 200))
 
       const offer = await webrtcTransfer.createOffer()
 
@@ -472,6 +699,9 @@ const FileSharingPage: React.FC = () => {
       }))
 
       // Wait for connection to be established, then send file
+      let connectionCheckAttempts = 0
+      const maxConnectionChecks = 30 // 30 seconds timeout
+
       const checkConnection = () => {
         const status = webrtcTransfer.getConnectionStatus()
         console.log('Connection status:', status)
@@ -503,13 +733,33 @@ const FileSharingPage: React.FC = () => {
             }
           }
         } else if (status === 'connecting' || status === 'checking') {
-          setTimeout(checkConnection, 1000)
-        } else {
+          connectionCheckAttempts++
+          if (connectionCheckAttempts < maxConnectionChecks) {
+            setTimeout(checkConnection, 1000)
+          } else {
+            setFileTransferState((prev) => ({
+              ...prev,
+              status: 'Connection timeout - please try again',
+              isTransferring: false,
+            }))
+          }
+        } else if (status === 'failed') {
           setFileTransferState((prev) => ({
             ...prev,
-            status: 'Connection failed',
+            status: 'Connection failed - please check your network',
             isTransferring: false,
           }))
+        } else {
+          connectionCheckAttempts++
+          if (connectionCheckAttempts < maxConnectionChecks) {
+            setTimeout(checkConnection, 1000)
+          } else {
+            setFileTransferState((prev) => ({
+              ...prev,
+              status: 'Connection timeout - please try again',
+              isTransferring: false,
+            }))
+          }
         }
       }
 
@@ -616,108 +866,157 @@ const FileSharingPage: React.FC = () => {
     await waitForWallet()
 
     try {
-      // Skip contract connection test for now due to wallet initialization issues
-      console.log('Skipping contract connection test due to wallet initialization issues')
-      console.log('TODO: Implement proper wallet state checking')
+      console.log('Starting file transfer process...')
 
+      // Step 1: Upload file to appropriate storage
       let ipfsCID = ''
-
-      // Upload to IPFS if file is large
       if (useIPFS) {
+        console.log('Uploading large file to IPFS...')
         ipfsCID = await uploadToIPFS(selectedFile)
+        console.log(`File uploaded to IPFS with CID: ${ipfsCID}`)
       }
 
-      // Calculate file hash
+      // Step 2: Calculate file hash for verification
       const fileHash = await calculateFileHash(selectedFile)
-      console.log('File hash:', fileHash)
+      console.log('File hash calculated:', fileHash)
 
-      // Create file request on blockchain
+      // Step 3: Create file request object
       const fileId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
-
-      console.log('Creating file request with args:', [
-        fileId,
-        recipientAddress,
+      const fileRequest: FileRequest = {
+        id: fileId,
+        sender: activeAddress || '',
+        recipient: recipientAddress,
         fileHash,
-        selectedFile.size.toString(),
-        (parseFloat(accessFee) * 1000000).toString(),
+        fileSize: selectedFile.size,
+        accessFee: parseFloat(accessFee),
         fileType,
-        useIPFS.toString(),
+        isIPFS: useIPFS,
         ipfsCID,
-      ])
-
-      // Try direct transaction first to see the exact error
-      const result = await fileContractClient.send.createFileRequest({
-        args: [
-          fileId,
-          recipientAddress,
-          fileHash,
-          selectedFile.size.toString(),
-          (parseFloat(accessFee) * 1000000).toString(), // Convert ALGO to microALGO
-          fileType,
-          useIPFS.toString(),
-          ipfsCID,
-        ],
-        sender: activeAddress,
-      })
-
-      console.log('File request created:', result)
-
-      // Reload file requests from blockchain after transaction completes
-      setTimeout(() => {
-        loadFileRequests()
-      }, 3000) // Wait 3 seconds for blockchain to update
-
-      // If using WebRTC, start file transfer
-      if (!useIPFS && webrtcTransfer && signalingClient) {
-        setFileTransferState((prev) => ({
-          ...prev,
-          isTransferring: true,
-          status: 'Starting WebRTC transfer...',
-          progress: 0,
-        }))
-
-        // Start WebRTC file transfer in background
-        sendFileViaWebRTC(selectedFile, recipientAddress).catch((error) => {
-          console.error('WebRTC transfer failed:', error)
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-          setFileTransferState((prev) => ({
-            ...prev,
-            status: `WebRTC transfer failed: ${errorMessage}`,
-            isTransferring: false,
-          }))
-        })
+        status: 'pending',
+        createdAt: new Date().toISOString(),
       }
 
-      setSuccess('File request created successfully!')
-      setSelectedFile(null)
-      setRecipientAddress('')
-      setAccessFee('')
+      console.log('Creating file request:', fileRequest)
 
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
-    } catch (err: unknown) {
-      console.error('Transaction error details:', err)
+      // Step 4: Create payment escrow on blockchain
+      const txId = await createPaymentEscrow(fileRequest)
+      console.log('Payment escrow created with transaction ID:', txId)
 
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
-
-      if (errorMessage.includes('Error resolving execution info')) {
-        setError(
-          'Contract execution failed. The smart contract may not be properly initialized or the method signature is incorrect. Please check the contract deployment.',
-        )
-      } else if (errorMessage.includes('Request Pending') || errorMessage.includes('timeout')) {
-        setError(
-          'Wallet is stuck with pending transactions. Use "Clear Wallet State" to reset, or "Force Wallet Reset" to disconnect completely.',
-        )
-      } else if (errorMessage.includes('insufficient funds')) {
-        setError('Insufficient funds. Please ensure your wallet has enough ALGO for the transaction.')
-      } else if (errorMessage.includes('application does not exist')) {
-        setError('Smart contract not found. Please check if the contract is properly deployed.')
+      // Step 5: Handle file transfer based on method
+      if (useIPFS) {
+        // For IPFS files, the receiver will download using the CID after payment
+        setSuccess(`File uploaded to IPFS! CID: ${ipfsCID}. Receiver can download after payment.`)
       } else {
-        setError(`Failed to create file request: ${errorMessage}`)
+        // For WebRTC files, start the direct transfer
+        console.log('Starting WebRTC file transfer...')
+        await sendFileViaWebRTC(selectedFile, recipientAddress)
       }
+
+      // Reset form
+      clearForm()
+    } catch (error) {
+      console.error('Error sending file:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      setError(`Failed to send file: ${errorMessage}`)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Handle receiver payment and download
+  const handleReceiverPayment = async (request: FileRequest) => {
+    if (!activeAddress || !transactionSigner) {
+      setError('Wallet not connected')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      console.log('Processing payment for file request:', request.id)
+
+      // Step 1: Make payment to escrow
+      const algorand = AlgorandClient.fromConfig({
+        algodConfig: getAlgodConfigFromViteEnvironment(),
+      })
+      algorand.setDefaultSigner(transactionSigner)
+
+      const fileContractClient = new FileSharingAppClient({
+        algorand,
+        defaultSender: activeAddress,
+        appId: BigInt(746505672),
+      })
+
+      // Check if contract exists
+      try {
+        await algorand.app.getById(fileContractClient.appId)
+        console.log('Contract found and ready')
+      } catch (error) {
+        console.error('Contract not found or not accessible:', error)
+        throw new Error('File sharing contract is not available. Please ensure the contract is deployed.')
+      }
+
+      // Make payment to escrow
+      const paymentAmount = algo(request.accessFee)
+      const result = await fileContractClient.send.makePayment({
+        args: {
+          fileId: request.id,
+          recipient: request.recipient,
+        },
+        payment: {
+          amount: paymentAmount,
+          receiver: fileContractClient.appAddress,
+        },
+      })
+
+      console.log('Payment made to escrow:', result.transaction.txID())
+
+      // Step 2: Download and verify file
+      let downloadedFile: File
+
+      if (request.isIPFS) {
+        // Download from IPFS
+        downloadedFile = await downloadFromIPFS(request.ipfsCID)
+      } else {
+        // For WebRTC files, this would be handled by the WebRTC transfer
+        throw new Error('WebRTC files should be handled by direct transfer')
+      }
+
+      // Step 3: Verify file hash
+      const isValid = await verifyFileHash(downloadedFile, request.fileHash)
+
+      if (!isValid) {
+        setError('File hash verification failed! File may be corrupted.')
+        return
+      }
+
+      // Step 4: Release escrow payment to sender
+      await releaseEscrowPayment(request)
+
+      setSuccess('Payment successful! File downloaded and verified. Escrow released to sender.')
+
+      // Update request status
+      request.status = 'completed'
+    } catch (error) {
+      console.error('Error processing payment:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      setError(`Payment failed: ${errorMessage}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Clear form after successful send
+  const clearForm = () => {
+    setSelectedFile(null)
+    setRecipientAddress('')
+    setAccessFee('')
+    setFileHash('')
+    setUseIPFS(false)
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
   }
 
@@ -859,13 +1158,8 @@ const FileSharingPage: React.FC = () => {
   }
 
   const downloadFile = async (request: FileRequest) => {
-    if (request.isIPFS) {
-      // Download from IPFS
-      window.open(`https://ipfs.io/ipfs/${request.ipfsCID}`, '_blank')
-    } else {
-      // WebRTC download (would be handled by the data channel)
-      console.log('Downloading via WebRTC...')
-    }
+    // Use the payment system for secure download
+    await handleReceiverPayment(request)
   }
 
   if (!activeAddress) {
