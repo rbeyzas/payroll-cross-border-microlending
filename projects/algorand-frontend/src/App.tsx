@@ -5,7 +5,6 @@ import Navbar from './components/Navbar'
 import LandingPage from './pages/LandingPage'
 import ConnectWalletPage from './pages/ConnectWalletPage'
 import PayrollPage from './pages/PayrollPage'
-import MicroloanPage from './pages/MicroloanPage'
 import LiquidAuthPage from './pages/LiquidAuthPage'
 import FileSharingPage from './pages/FileSharingPage'
 import Home from './Home'
@@ -71,7 +70,6 @@ export default function App() {
               <Route path="/demo" element={<Home />} />
               <Route path="/dashboard" element={<Home />} />
               <Route path="/payroll" element={<PayrollPage />} />
-              <Route path="/microlending" element={<MicroloanPage />} />
               <Route path="/liquid-auth" element={<LiquidAuthPage />} />
               <Route path="/file-sharing" element={<FileSharingPage />} />
               <Route path="/analytics" element={<Home />} />

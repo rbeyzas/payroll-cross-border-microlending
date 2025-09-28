@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
               <span
                 className={`text-xl font-bold ${isHomePage ? 'text-white group-hover:text-green-400' : 'text-gray-900 group-hover:text-green-600'} transition-colors duration-300`}
               >
-                Cross-Border Microlending
+                Cross-Border Platform
               </span>
             </Link>
           </div>
@@ -158,16 +158,6 @@ const Navbar: React.FC = () => {
               }`}
             >
               Payroll
-            </Link>
-            <Link
-              to="/microlending"
-              className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/microlending'
-                  ? `${isHomePage ? 'text-blue-400 border-b-2 border-blue-400' : 'text-blue-600 border-b-2 border-blue-600'} pb-1`
-                  : `${isHomePage ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`
-              }`}
-            >
-              Microlending
             </Link>
             {/* <Link
               to="/analytics"
@@ -396,16 +386,6 @@ const Navbar: React.FC = () => {
             }`}
           >
             Payroll
-          </Link>
-          <Link
-            to="/microlending"
-            className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/microlending'
-                ? `${isHomePage ? 'text-blue-400 bg-blue-900/50' : 'text-blue-600 bg-blue-50'}`
-                : `${isHomePage ? 'text-gray-300 hover:text-blue-400 hover:bg-gray-700' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'}`
-            }`}
-          >
-            Microlending
           </Link>
           <Link
             to="/file-sharing"

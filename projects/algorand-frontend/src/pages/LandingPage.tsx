@@ -7,12 +7,6 @@ const LandingPage: React.FC = () => {
 
   const features = [
     {
-      title: 'Cross-Border Microlending',
-      description: 'Revolutionary microlending platform with real-time DID resolution, trust scoring, and Algorand smart contracts.',
-      icon: '💳',
-      gradient: 'from-green-500 to-blue-500',
-    },
-    {
       title: 'Liquid Auth Integration',
       description: 'Secure authentication with Liquid Auth and GoPlausible DID resolution for decentralized identity management.',
       icon: '🔐',
@@ -63,20 +57,20 @@ const LandingPage: React.FC = () => {
             <h1 className="text-6xl md:text-8xl font-bold mb-8">
               <span className="block text-white">Cross-Border</span>
               <span className="block bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-pulse">
-                Microlending
+                Platform
               </span>
               <span className="block text-4xl md:text-5xl text-gray-300 mt-4">Platform</span>
             </h1>
 
             <p className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-              Revolutionary microlending platform built on Algorand blockchain with Liquid Auth, GoPlausible DID resolution, and real-time
-              trust scoring. Experience the future of decentralized finance.
+              Revolutionary cross-border platform built on Algorand blockchain with Liquid Auth, GoPlausible DID resolution, and real-time
+              authentication. Experience the future of decentralized applications.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
               {activeAddress ? (
                 <Link
-                  to="/microlending"
+                  to="/payroll"
                   className="group relative bg-gradient-to-r from-green-500 to-blue-500 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:from-green-400 hover:to-blue-400 transition-all duration-300 shadow-2xl hover:shadow-green-500/25 transform hover:scale-105"
                 >
                   <span className="relative z-10">Launch Platform →</span>
@@ -135,7 +129,7 @@ const LandingPage: React.FC = () => {
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-white mb-6">Platform Features</h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Built on Algorand blockchain with cutting-edge technology for secure, fast, and transparent microlending
+              Built on Algorand blockchain with cutting-edge technology for secure, fast, and transparent cross-border applications
             </p>
           </div>
 
@@ -249,9 +243,9 @@ const LandingPage: React.FC = () => {
       {/* CTA Section */}
       <div className="relative z-10 bg-gradient-to-r from-green-600 to-blue-600 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl font-bold text-white mb-6">Ready to Experience the Future of Microlending?</h2>
+          <h2 className="text-5xl font-bold text-white mb-6">Ready to Experience the Future of Cross-Border Applications?</h2>
           <p className="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
-            Join the revolution of cross-border microlending with Algorand blockchain, Liquid Auth, and AI-powered trust scoring.
+            Join the revolution of cross-border applications with Algorand blockchain, Liquid Auth, and decentralized identity management.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -277,21 +271,16 @@ const LandingPage: React.FC = () => {
                 <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">A</span>
                 </div>
-                <span className="text-xl font-bold">Cross-Border Microlending</span>
+                <span className="text-xl font-bold">Cross-Border Platform</span>
               </div>
               <p className="text-gray-400">
-                Revolutionary microlending platform built on Algorand blockchain with Liquid Auth and GoPlausible DID resolution.
+                Revolutionary cross-border platform built on Algorand blockchain with Liquid Auth and GoPlausible DID resolution.
               </p>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4 text-white">Platform</h4>
               <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link to="/microlending" className="hover:text-green-400 transition-colors">
-                    Microlending Platform
-                  </Link>
-                </li>
                 <li>
                   <Link to="/connect-wallet" className="hover:text-green-400 transition-colors">
                     Connect Wallet
@@ -338,7 +327,7 @@ const LandingPage: React.FC = () => {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Cross-Border Microlending MVP. Built on Algorand blockchain for hackathon demonstration.</p>
+            <p>&copy; 2024 Cross-Border Platform MVP. Built on Algorand blockchain for hackathon demonstration.</p>
           </div>
         </div>
       </div>
