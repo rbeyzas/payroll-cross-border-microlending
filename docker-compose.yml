@@ -47,7 +47,9 @@ services:
       REDIS_PORT: 6379
       RP_NAME: My Algorand dApp
       HOSTNAME: localhost
-      ORIGIN: http://localhost:5173
+      ORIGIN: http://localhost:5176
+      CORS_ORIGIN: http://localhost:5176
+      ALLOWED_ORIGINS: http://localhost:5176,http://localhost:5173
       ALGORAND_NETWORK: testnet
       ALGORAND_NODE_URL: https://testnet-api.algonode.cloud
       ALGORAND_INDEXER_URL: https://testnet-idx.algonode.cloud

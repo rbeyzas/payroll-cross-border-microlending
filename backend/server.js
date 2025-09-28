@@ -178,6 +178,63 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Liquid Auth proxy endpoints to avoid CORS issues
+app.post("/liquid-auth/attestation/request", async (req, res) => {
+  try {
+    const response = await axios.post("http://liquid-auth:3000/attestation/request", req.body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error("Liquid Auth attestation request error:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { error: "Liquid Auth service error" });
+  }
+});
+
+app.post("/liquid-auth/attestation/response", async (req, res) => {
+  try {
+    const response = await axios.post("http://liquid-auth:3000/attestation/response", req.body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error("Liquid Auth attestation response error:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { error: "Liquid Auth service error" });
+  }
+});
+
+app.post("/liquid-auth/assertion/request", async (req, res) => {
+  try {
+    const response = await axios.post("http://liquid-auth:3000/assertion/request", req.body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error("Liquid Auth assertion request error:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { error: "Liquid Auth service error" });
+  }
+});
+
+app.post("/liquid-auth/assertion/response", async (req, res) => {
+  try {
+    const response = await axios.post("http://liquid-auth:3000/assertion/response", req.body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error("Liquid Auth assertion response error:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json(error.response?.data || { error: "Liquid Auth service error" });
+  }
+});
+
 // Get all loans
 app.get("/api/loans", async (req, res) => {
   try {

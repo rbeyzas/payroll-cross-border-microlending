@@ -91,33 +91,79 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
     setError(null)
 
     try {
-      // Use real Liquid Auth API
-      if (!socket) {
-        throw new Error('Not connected to Liquid Auth server')
+      // Use real Liquid Auth API through backend proxy
+      const response = await fetch('http://localhost:3001/liquid-auth/attestation/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'user@example.com',
+          displayName: 'Demo User',
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        if (errorData.reason === 'not_implemented' && errorData.error === 'Liquid extension is required') {
+          // Fallback to direct WebAuthn implementation
+          console.log('Liquid extension not available, using direct WebAuthn implementation')
+          await registerWithDirectWebAuthn()
+          return
+        }
+        throw new Error(`Registration request failed: ${response.statusText}`)
       }
 
-      // Emit registration request to Liquid Auth server
-      socket.emit('register_request', {
-        username: 'user@example.com',
-        displayName: 'Demo User',
+      const options = await response.json()
+      console.log('Registration options received:', options)
+
+      // Create WebAuthn credential
+      const credential = (await navigator.credentials.create({
+        publicKey: options,
+      })) as PublicKeyCredential
+
+      console.log('WebAuthn credential created:', credential.id)
+
+      // Send credential to Liquid Auth server through backend proxy
+      const attestationResponse = await fetch('http://localhost:3001/liquid-auth/attestation/response', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          credential: {
+            id: credential.id,
+            rawId: Array.from(new Uint8Array(credential.rawId)),
+            response: {
+              attestationObject: Array.from(new Uint8Array((credential.response as AuthenticatorAttestationResponse).attestationObject)),
+              clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
+            },
+            type: credential.type,
+          },
+        }),
       })
 
-      // Wait for server response
-      await new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('Registration timeout'))
-        }, 30000)
+      if (!attestationResponse.ok) {
+        throw new Error(`Registration failed: ${attestationResponse.statusText}`)
+      }
 
-        socket.once('attestation_success', (data) => {
-          clearTimeout(timeout)
-          resolve(data)
-        })
+      const result = await attestationResponse.json()
+      console.log('Registration successful:', result)
 
-        socket.once('attestation_error', (error) => {
-          clearTimeout(timeout)
-          reject(new Error(error.message || 'Registration failed'))
-        })
-      })
+      // Create user data from result
+      const userData: User = {
+        did: result.did || `did:algo:testnet:${credential.id}`,
+        address: result.address || credential.id,
+        publicKey: result.publicKey || credential.id,
+        controller: result.did || `did:algo:testnet:${credential.id}`,
+      }
+
+      setUser(userData)
+      localStorage.setItem('liquidAuthUser', JSON.stringify(userData))
+
+      if (onLogin) {
+        onLogin(userData)
+      }
     } catch (err) {
       console.error('Registration error:', err)
       setError(err instanceof Error ? err.message : 'Registration failed')
@@ -228,32 +274,79 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
         }
       }
 
-      // Use real Liquid Auth API
-      if (!socket) {
-        throw new Error('Not connected to Liquid Auth server')
+      // Use real Liquid Auth API through backend proxy
+      const response = await fetch('http://localhost:3001/liquid-auth/assertion/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'user@example.com',
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        if (errorData.reason === 'not_implemented' && errorData.error === 'Liquid extension is required') {
+          // Fallback to direct WebAuthn implementation
+          console.log('Liquid extension not available, using direct WebAuthn implementation')
+          await loginWithDirectWebAuthn()
+          return
+        }
+        throw new Error(`Login request failed: ${response.statusText}`)
       }
 
-      // Emit login request to Liquid Auth server
-      socket.emit('login_request', {
-        username: 'user@example.com',
+      const options = await response.json()
+      console.log('Login options received:', options)
+
+      // Get WebAuthn credential
+      const credential = (await navigator.credentials.get({
+        publicKey: options,
+      })) as PublicKeyCredential
+
+      console.log('WebAuthn credential retrieved:', credential.id)
+
+      // Send credential to Liquid Auth server through backend proxy
+      const assertionResponse = await fetch('http://localhost:3001/liquid-auth/assertion/response', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          credential: {
+            id: credential.id,
+            rawId: Array.from(new Uint8Array(credential.rawId)),
+            response: {
+              authenticatorData: Array.from(new Uint8Array((credential.response as AuthenticatorAssertionResponse).authenticatorData)),
+              clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
+              signature: Array.from(new Uint8Array((credential.response as AuthenticatorAssertionResponse).signature)),
+            },
+            type: credential.type,
+          },
+        }),
       })
 
-      // Wait for server response
-      await new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('Login timeout'))
-        }, 30000)
+      if (!assertionResponse.ok) {
+        throw new Error(`Login failed: ${assertionResponse.statusText}`)
+      }
 
-        socket.once('assertion_success', (data) => {
-          clearTimeout(timeout)
-          resolve(data)
-        })
+      const result = await assertionResponse.json()
+      console.log('Login successful:', result)
 
-        socket.once('assertion_error', (error) => {
-          clearTimeout(timeout)
-          reject(new Error(error.message || 'Login failed'))
-        })
-      })
+      // Create user data from result
+      const userData: User = {
+        did: result.did || `did:algo:testnet:${credential.id}`,
+        address: result.address || credential.id,
+        publicKey: result.publicKey || credential.id,
+        controller: result.did || `did:algo:testnet:${credential.id}`,
+      }
+
+      setUser(userData)
+      localStorage.setItem('liquidAuthUser', JSON.stringify(userData))
+
+      if (onLogin) {
+        onLogin(userData)
+      }
     } catch (err) {
       console.error('Login error:', err)
       setError(err instanceof Error ? err.message : 'Login failed')
@@ -505,8 +598,8 @@ const LiquidAuth: React.FC<LiquidAuthProps> = ({ onLogin, onLogout }) => {
         <p className="text-gray-600">Choose your preferred login method</p>
         <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-700">
-            <strong>Liquid Auth Integration:</strong> This component uses direct WebAuthn implementation for demonstration purposes. In
-            production, it would integrate with Liquid Auth API.
+            <strong>Liquid Auth Integration:</strong> This component integrates with the Liquid Auth service. For full functionality,
+            install the Liquid browser extension or use the fallback WebAuthn implementation.
           </p>
         </div>
       </div>
