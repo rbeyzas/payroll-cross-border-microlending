@@ -36,7 +36,6 @@ const LandingPage: React.FC = () => {
     { label: 'Smart Contracts', value: '3 Deployed', icon: '🔗' },
     { label: 'Network', value: 'Algorand Testnet', icon: '🌐' },
     { label: 'DID Resolution', value: 'GoPlausible', icon: '🆔' },
-    { label: 'Trust Score', value: 'Real-time', icon: '📊' },
   ]
 
   const techStack = [
@@ -92,12 +91,6 @@ const LandingPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-400 rounded-2xl blur opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
                 </Link>
               )}
-              <Link
-                to="/trustscore"
-                className="group border-2 border-gray-600 text-gray-300 px-10 py-5 rounded-2xl font-bold text-xl hover:border-green-400 hover:text-green-400 transition-all duration-300 hover:bg-gray-800/50 backdrop-blur-sm"
-              >
-                Trust Score
-              </Link>
             </div>
 
             {/* Tech Stack Cards */}
@@ -271,12 +264,6 @@ const LandingPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gray-100 rounded-2xl blur opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
               </Link>
             )}
-            <Link
-              to="/trustscore"
-              className="group relative border-2 border-white text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white hover:text-green-600 transition-all duration-300 backdrop-blur-sm"
-            >
-              Trust Score
-            </Link>
           </div>
         </div>
       </div>
@@ -303,11 +290,6 @@ const LandingPage: React.FC = () => {
                 <li>
                   <Link to="/microlending" className="hover:text-green-400 transition-colors">
                     Microlending Platform
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/trustscore" className="hover:text-green-400 transition-colors">
-                    Trust Score
                   </Link>
                 </li>
                 <li>

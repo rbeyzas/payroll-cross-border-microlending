@@ -155,18 +155,6 @@ export class DIDResolver {
   }
 }
 
-// Trust score calculation based on DID and loan history
-export interface TrustScore {
-  score: number
-  factors: {
-    loanHistory: number
-    repaymentRate: number
-    timeActive: number
-    verificationLevel: number
-  }
-  recommendations: string[]
-}
-
 export class TrustScoreCalculator {
   calculate(did: string, loanHistory: any[] = []): TrustScore {
     const factors = {
@@ -329,4 +317,3 @@ export class AlgorandDIDManager {
 
 // Export singleton instance
 export const didResolver = new DIDResolver()
-export const trustScoreCalculator = new TrustScoreCalculator()

@@ -199,16 +199,6 @@ const Navbar: React.FC = () => {
             >
               Liquid Auth
             </Link>
-            <Link
-              to="/trustscore"
-              className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === '/trustscore'
-                  ? `${isHomePage ? 'text-purple-400 border-b-2 border-purple-400' : 'text-purple-600 border-b-2 border-purple-600'} pb-1`
-                  : `${isHomePage ? 'text-gray-300 hover:text-purple-400' : 'text-gray-700 hover:text-purple-600'}`
-              }`}
-            >
-              Trust Score
-            </Link>
           </div>
 
           {/* Connect Wallet Button & Balance */}
@@ -436,16 +426,6 @@ const Navbar: React.FC = () => {
             }`}
           >
             Liquid Auth
-          </Link>
-          <Link
-            to="/trustscore"
-            className={`block px-3 py-2 text-base font-medium ${
-              location.pathname === '/trustscore'
-                ? `${isHomePage ? 'text-purple-400 bg-purple-900/50' : 'text-purple-600 bg-purple-50'}`
-                : `${isHomePage ? 'text-gray-300 hover:text-purple-400 hover:bg-gray-700' : 'text-gray-700 hover:text-purple-600 hover:bg-gray-100'}`
-            }`}
-          >
-            Trust Score
           </Link>
         </div>
       </div>

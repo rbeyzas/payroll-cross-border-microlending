@@ -8,7 +8,6 @@ import PayrollPage from './pages/PayrollPage'
 import MicroloanPage from './pages/MicroloanPage'
 import LiquidAuthPage from './pages/LiquidAuthPage'
 import FileSharingPage from './pages/FileSharingPage'
-import HackathonDemo from './pages/HackathonDemo'
 import Home from './Home'
 import { getAlgodConfigFromViteEnvironment, getKmdConfigFromViteEnvironment } from './utils/network/getAlgoClientConfigs'
 
@@ -75,7 +74,6 @@ export default function App() {
               <Route path="/microlending" element={<MicroloanPage />} />
               <Route path="/liquid-auth" element={<LiquidAuthPage />} />
               <Route path="/file-sharing" element={<FileSharingPage />} />
-              <Route path="/trustscore" element={<HackathonDemo />} />
               <Route path="/analytics" element={<Home />} />
             </Routes>
           </div>

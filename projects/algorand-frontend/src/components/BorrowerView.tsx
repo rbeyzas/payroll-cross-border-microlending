@@ -138,19 +138,6 @@ export default function BorrowerView() {
     }
   }
 
-  const getTrustScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600'
-    if (score >= 60) return 'text-yellow-600'
-    return 'text-red-600'
-  }
-
-  const getTrustScoreLabel = (score: number) => {
-    if (score >= 80) return 'Excellent'
-    if (score >= 60) return 'Good'
-    if (score >= 40) return 'Fair'
-    return 'Poor'
-  }
-
   if (!isAuthenticated) {
     return (
       <div className="max-w-4xl mx-auto p-6">
@@ -202,11 +189,6 @@ export default function BorrowerView() {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-medium text-gray-700">DID Identity</h3>
                 <p className="text-sm text-gray-600 mt-1 break-all">{borrowerProfile.did}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-medium text-gray-700">Trust Score</h3>
-                <p className={`text-2xl font-bold ${getTrustScoreColor(borrowerProfile.trustScore)}`}>{borrowerProfile.trustScore}</p>
-                <p className="text-sm text-gray-600">{getTrustScoreLabel(borrowerProfile.trustScore)}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-medium text-gray-700">Loan History</h3>

@@ -122,19 +122,6 @@ export default function LenderView() {
     }
   }
 
-  const getTrustScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600'
-    if (score >= 60) return 'text-yellow-600'
-    return 'text-red-600'
-  }
-
-  const getTrustScoreLabel = (score: number) => {
-    if (score >= 80) return 'Excellent'
-    if (score >= 60) return 'Good'
-    if (score >= 40) return 'Fair'
-    return 'Poor'
-  }
-
   if (!isAuthenticated) {
     return (
       <div className="max-w-4xl mx-auto p-6">
@@ -211,7 +198,6 @@ export default function LenderView() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Term</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Borrower</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trust Score</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -237,16 +223,6 @@ export default function LenderView() {
                             <p className="text-xs text-blue-600 mt-1">DID: {borrowerProfile.did.split(':').pop()?.slice(0, 10)}...</p>
                           )}
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {borrowerProfile ? (
-                          <div>
-                            <p className={`font-bold ${getTrustScoreColor(borrowerProfile.trustScore)}`}>{borrowerProfile.trustScore}</p>
-                            <p className="text-xs text-gray-500">{getTrustScoreLabel(borrowerProfile.trustScore)}</p>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400">Loading...</span>
-                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {loan.status === 'requested' && (
@@ -278,10 +254,6 @@ export default function LenderView() {
                 <div key={address} className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="font-medium text-gray-800 mb-2">{profile.did.split(':').pop()?.slice(0, 20)}...</h4>
                   <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Trust Score:</span>
-                      <span className={`font-bold ${getTrustScoreColor(profile.trustScore)}`}>{profile.trustScore}</span>
-                    </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Total Loans:</span>
                       <span className="text-sm font-medium">{profile.totalLoans}</span>
